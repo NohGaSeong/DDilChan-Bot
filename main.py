@@ -1,15 +1,20 @@
 import discord
 import os
 import asyncio
+import pytz
 
 from discord.ext import commands
 from dotenv import load_dotenv
+
+from datetime import datetime
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 
 load_dotenv()
 Token = os.getenv('Token')
+
+embed=discord.Embed(timestamp=datetime.now(pytz.timezone('UTC')), color=0x54b800)
 
 @bot.event
 async def on_ready():
@@ -37,6 +42,11 @@ async def 회의공지(ctx):
             await ctx.channel.send(message.content)
         else :
             await ctx.channel.send("장소를 다시 입력해주세요.")
+
+@bot.command()
+async def 회의확인(ctx):
+    await ctx.channel.send(file=discord.File("resource\회의확인.png"), embed=embed)
+
 
 
 bot.run(Token)
