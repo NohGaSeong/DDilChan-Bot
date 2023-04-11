@@ -4,6 +4,7 @@ import asyncio
 import pytz
 
 from discord.ext import commands
+from discord.ui import Select, View
 from dotenv import load_dotenv
 
 from datetime import datetime
@@ -13,6 +14,7 @@ today_meet_count = 0
 meeting_subject = ""
 meeting_time = ""
 meeting_place = ""
+select_member = []
 
 load_dotenv()
 Token = os.getenv('Token')
@@ -35,30 +37,45 @@ async def on_ready():
     print('------------')
     print(Token)
 
-class Metting_member(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-        self.value = None
     
-    @discord.ui.button(label="멤버선택",  style=discord.ButtonStyle.grey)
-    async def member_select(self, interaction:discord.Interaction, button:discord.ui.button):
-        global today_meet_count
-
-        embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}")
-        today_meet_count += 1
-        await interaction.response.send_message(content = "회의 등록이 완료되었어요!")
 
 class Metting_time(discord.ui.View):
     def __init__(self):
         super().__init__()
         self.value = None
+
     @discord.ui.button(label= "아침시간", style=discord.ButtonStyle.grey)
     async def metting_time_1(self, interaction:discord.Interaction, button:discord.ui.button):
         global meeting_time
         
-        view = Metting_member()
+        select = Select(
+            min_values =2,
+            max_values =5,
+            placeholder="회의 인원을 선택해주세요!",
+            options=[
+            discord.SelectOption(label="이현빈", emoji="🤖", description="안드로이드"),
+            discord.SelectOption(label="변찬우", emoji="🤖", description="안드로이드"),
+            discord.SelectOption(label="노가성", emoji="🤖", description="안드로이드"),
+            discord.SelectOption(label="정은성", emoji="🤖", description="안드로이드"),
+            discord.SelectOption(label="김동현", emoji="🤖", description="안드로이드")
+        ],
+        row=2
+        )
+        
+        async def my_callback(interaction):
+            global select_member 
+
+            select_member = select.values
+            embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}\n멤버: {select_member}")
+            today_meet_count += 1
+            await interaction.response.send_message(content="회의 등록이 완료되었어요!")
+
+        select.callback = my_callback
+        view = View()
+        view.add_item(select)
         meeting_time = "아침시간"
-        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.",view=view)
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
 class Metting_place(discord.ui.View):
     def __init__(self):
@@ -82,7 +99,7 @@ class Menu(discord.ui.View):
     async def menu1(self, interaction: discord.Interaction, button: discord.ui.Button):
         global meeting_subject
         global message
-        
+
         view = Metting_place()
         member = interaction.user
         await interaction.response.send_message(content = "회의 주제를 알려주세요.")
