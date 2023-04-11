@@ -39,7 +39,8 @@ class Metting_member(discord.ui.View):
     
     @discord.ui.button(label="멤버선택",  style=discord.ButtonStyle.grey)
     async def member_select(self, interaction:discord.Interaction, button:discord.ui.button):
-        await interaction.response.send_message(content = "회의 등록이 완료됐어요.")
+        embed.add_field(name = "", value = "")
+        await interaction.response.send_message(content = "회의 등록이 완료되었어요!")
 
 class Metting_time(discord.ui.View):
     def __init__(self):
@@ -48,7 +49,7 @@ class Metting_time(discord.ui.View):
     @discord.ui.button(label= "아침시간", style=discord.ButtonStyle.grey)
     async def metting_time_1(self, interaction:discord.Interaction, button:discord.ui.button):
         view = Metting_member()
-        await interaction.response.send_message(content = "회의 등록이 완료되었어요!",view=view)
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.",view=view)
 
 class Metting_place(discord.ui.View):
     def __init__(self):
@@ -69,31 +70,39 @@ class Menu(discord.ui.View):
     async def menu1(self, interaction: discord.Interaction, button: discord.ui.Button):
         view = Metting_place()
         member = interaction.user
-        await interaction.response.send_message(content = "회의를 할 장소를 골라주세요.", view=view)
+        await interaction.response.send_message(content = "회의 주제를 알려주세요.")
+        
+        try:
+            message = await bot.wait_for("message", check=lambda message: interaction.user == member, timeout=15.0)
+        except asyncio.TimeoutError:
+            await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
+
+        else :
+            await message.channel.send(content= "회의할 장소를 선택해주세요", view=view)
+
 
 
     @discord.ui.button(label="회의 목록", style = discord.ButtonStyle.blurple)
     async def menu2(self, interaction: discord.Interaction, button : discord.ui.Button):
-        embed = discord.Embed(color=discord.Color.random())
-        embed.set_author(name=f"This is a edited embed")
+        embed.set_author(name="띨챤의 회의 관리 리스트")
 
         if today_meet_count > 3:
             embed.set_image(url=(many_many_metting_vichan_gif))
-            embed.add_field(name="Dill", value = "오늘은 회의로 가득한 날... 😭")
+            on_embed_text = "오늘은 회의로 가득한 날... 😭"
         
         elif today_meet_count > 1:
             embed.set_image(url=(many_metting_vichan_gif))
-            embed.add_field(name="Dill", value = "오늘은 회의 많은 날.. 😓")
+            on_embed_text = "오늘은 회의 많은 날.. 😓"
 
         elif today_meet_count == 1:
             embed.set_image(url=(one_metting_vichan_gif))
-            embed.add_field(name="Diil", value = "오늘의 회의 1개 뿐인 날! 🎉")
+            on_embed_text = "오늘의 회의 1개 뿐인 날! 🎉"
         
         else :
             embed.set_image(url=(no_metting_vichan_gif))
-            embed.add_field(name="Diil", value = "오늘은 회의 없는 날! 🎊")
+            on_embed_text = "오늘은 회의 없는 날! 🎊"
         
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(content=on_embed_text, embed=embed)
     
     @discord.ui.button(label="명령어", style = discord.ButtonStyle.red)
     async def menu3(self, interaction: discord.Interaction, button : discord.ui.Button):
