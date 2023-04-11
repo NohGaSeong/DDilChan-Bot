@@ -6,8 +6,12 @@ import pytz
 from discord.ext import commands
 from discord.ui import Select, View
 from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 
 from datetime import datetime
+
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 today_meet_count = 0
@@ -18,10 +22,16 @@ select_member = []
 
 load_dotenv()
 Token = os.getenv('Token')
+database_url = os.getenv('database_url')
 
 embed=discord.Embed(timestamp=datetime.now(pytz.timezone('UTC')), color=0x54b800)
 
+cred = credentials.Certificate("ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL' : database_url
+})
 
+dir = db.reference() 
 
 many_metting_vichan_gif = "https://media.tenor.com/L9C-SHIR2AQAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
 many_many_metting_vichan_gif = "https://media.tenor.com/INrkO7KEe3QAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
@@ -36,6 +46,7 @@ async def on_ready():
     print(bot.user.id)
     print('------------')
     print(Token)
+    print(dir.get())
 
     
 
@@ -67,7 +78,7 @@ class Metting_time(discord.ui.View):
             global today_meet_count
 
             select_member = (','.join(select.values))
-            embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}\n멤버: {select_member}", inline=False)
+            embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}\n멤버: {select_member}\n", inline=False)
             today_meet_count += 1
             await interaction.response.send_message(content="회의 등록이 완료되었어요!")
 
