@@ -9,7 +9,10 @@ from dotenv import load_dotenv
 from datetime import datetime
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
-today_meet_count = 5
+today_meet_count = 0
+meeting_subject = ""
+meeting_time = ""
+meeting_place = ""
 
 load_dotenv()
 Token = os.getenv('Token')
@@ -39,7 +42,10 @@ class Metting_member(discord.ui.View):
     
     @discord.ui.button(label="멤버선택",  style=discord.ButtonStyle.grey)
     async def member_select(self, interaction:discord.Interaction, button:discord.ui.button):
-        embed.add_field(name = "", value = "")
+        global today_meet_count
+        
+        embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}")
+        today_meet_count += 1
         await interaction.response.send_message(content = "회의 등록이 완료되었어요!")
 
 class Metting_time(discord.ui.View):
@@ -48,7 +54,10 @@ class Metting_time(discord.ui.View):
         self.value = None
     @discord.ui.button(label= "아침시간", style=discord.ButtonStyle.grey)
     async def metting_time_1(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+        
         view = Metting_member()
+        meeting_time = "아침시간"
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.",view=view)
 
 class Metting_place(discord.ui.View):
@@ -58,7 +67,10 @@ class Metting_place(discord.ui.View):
 
     @discord.ui.button(label="2층 홈베이스", style=discord.ButtonStyle.grey)
     async def metting_place_1(self, interaction:discord.Interaction, button : discord.ui.button):
+        global meeting_place
+
         view = Metting_time()
+        meeting_place = "2층 홈베이스"
         await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
 
 class Menu(discord.ui.View):
@@ -68,6 +80,8 @@ class Menu(discord.ui.View):
 
     @discord.ui.button(label="회의 신청", style=discord.ButtonStyle.grey)
     async def menu1(self, interaction: discord.Interaction, button: discord.ui.Button):
+        global meeting_subject
+
         view = Metting_place()
         member = interaction.user
         await interaction.response.send_message(content = "회의 주제를 알려주세요.")
@@ -78,6 +92,7 @@ class Menu(discord.ui.View):
             await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
 
         else :
+            meeting_subject = message.content
             await message.channel.send(content= "회의할 장소를 선택해주세요", view=view)
 
 
