@@ -43,7 +43,7 @@ class Metting_member(discord.ui.View):
     @discord.ui.button(label="멤버선택",  style=discord.ButtonStyle.grey)
     async def member_select(self, interaction:discord.Interaction, button:discord.ui.button):
         global today_meet_count
-        
+
         embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}")
         today_meet_count += 1
         await interaction.response.send_message(content = "회의 등록이 완료되었어요!")
@@ -81,7 +81,8 @@ class Menu(discord.ui.View):
     @discord.ui.button(label="회의 신청", style=discord.ButtonStyle.grey)
     async def menu1(self, interaction: discord.Interaction, button: discord.ui.Button):
         global meeting_subject
-
+        global message
+        
         view = Metting_place()
         member = interaction.user
         await interaction.response.send_message(content = "회의 주제를 알려주세요.")
