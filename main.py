@@ -31,7 +31,6 @@ firebase_admin.initialize_app(cred, {
     'databaseURL' : database_url
 })
 
-dir = db.reference() 
 
 many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923550302208/WASTED.png"
 many_many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923034415114/CRYING_CHAN2.gif"
@@ -46,9 +45,26 @@ async def on_ready():
     print(bot.user.id)
     print('------------')
     print(Token)
-    print(dir.get())
-
     
+    dir = db.reference()
+
+class Metting_member(discord.ui.Select):
+    def __init__(self):
+        options=[discord.SelectOption(label="이현빈", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="변찬우", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="노가성", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="정은성", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="김동현", description="안드로이드", emoji="🤖")]
+        super().__init__(placeholder="회의 인원을 선택해주세요!", options=options, min_values=2, max_values=5, row=2)
+    
+    async def callback(self, interaction: discord.Interaction):
+        select_member = (','.join(self.values))
+        await interaction.response.send_message(content = f"{self.values}")
+
+class Select(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+        self.add_item(Metting_member())
 
 class Metting_time(discord.ui.View):
     def __init__(self):
@@ -57,36 +73,10 @@ class Metting_time(discord.ui.View):
 
     @discord.ui.button(label= "아침시간", style=discord.ButtonStyle.grey)
     async def metting_time_1(self, interaction:discord.Interaction, button:discord.ui.button):
-        global meeting_time
-        
-        select = Select(
-            min_values =2,
-            max_values =5,
-            placeholder="회의 인원을 선택해주세요!",
-            options=[
-            discord.SelectOption(label="이현빈", emoji="🤖", description="안드로이드"),
-            discord.SelectOption(label="변찬우", emoji="🤖", description="안드로이드"),
-            discord.SelectOption(label="노가성", emoji="🤖", description="안드로이드"),
-            discord.SelectOption(label="정은성", emoji="🤖", description="안드로이드"),
-            discord.SelectOption(label="김동현", emoji="🤖", description="안드로이드")
-        ],
-        row=2
-        )
-        
-        async def my_callback(interaction):
-            global select_member 
-            global today_meet_count
+        global metting_time
 
-            select_member = (','.join(select.values))
-            embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}\n멤버: {select_member}\n", inline=False)
-            today_meet_count += 1
-            await interaction.response.send_message(content="회의 등록이 완료되었어요!")
-
-        select.callback = my_callback
-        view = View()
-        view.add_item(select)
+        view = Select()
         meeting_time = "아침시간"
-
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
 class Metting_place(discord.ui.View):
@@ -101,6 +91,7 @@ class Metting_place(discord.ui.View):
         view = Metting_time()
         meeting_place = "2층 홈베이스"
         await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
+
 
 class Menu(discord.ui.View):
     def __init__(self):
@@ -123,7 +114,16 @@ class Menu(discord.ui.View):
 
         else :
             meeting_subject = message.content
-            await message.channel.send(content= "회의할 장소를 선택해주세요", view=view)
+            await message.channel.send(content= "회의할 날짜를 말해주세요")
+            
+            try:
+                message = await bot.wait_for("message", check=lambda message: interaction.user == member, timeout=15.0)
+            except asyncio.TimeoutError:
+                await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
+            else:
+                meeting_date = message.content
+                view = Metting_place()
+                await message.channel.send(content = "회의할 장소를 선택해주세요.", view=view)
 
 
 
