@@ -76,7 +76,6 @@ class Menu(discord.ui.View):
     async def menu2(self, interaction: discord.Interaction, button : discord.ui.Button):
         embed = discord.Embed(color=discord.Color.random())
         embed.set_author(name=f"This is a edited embed")
-        print(interaction.author)
 
         if today_meet_count > 3:
             embed.set_image(url=(many_many_metting_vichan_gif))
