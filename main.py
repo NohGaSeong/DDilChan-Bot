@@ -64,9 +64,10 @@ class Metting_time(discord.ui.View):
         
         async def my_callback(interaction):
             global select_member 
+            global today_meet_count
 
-            select_member = select.values
-            embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}\n멤버: {select_member}")
+            select_member = (','.join(select.values))
+            embed.add_field(name = meeting_subject, value = f"장소: {meeting_place}\n시간: {meeting_time}\n멤버: {select_member}", inline=False)
             today_meet_count += 1
             await interaction.response.send_message(content="회의 등록이 완료되었어요!")
 
