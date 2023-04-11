@@ -33,10 +33,10 @@ firebase_admin.initialize_app(cred, {
 
 dir = db.reference() 
 
-many_metting_vichan_gif = "https://media.tenor.com/L9C-SHIR2AQAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
-many_many_metting_vichan_gif = "https://media.tenor.com/INrkO7KEe3QAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
-one_metting_vichan_gif = "https://media.tenor.com/INrkO7KEe3QAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
-no_metting_vichan_gif = "https://media.tenor.com/YLVttql_kgIAAAAC/%E3%82%94%E3%81%83%E3%81%A1%E3%82%83%E3%82%93-viichan.gif"
+many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923550302208/WASTED.png"
+many_many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923034415114/CRYING_CHAN2.gif"
+one_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244921922924544/RUNNING_CHAN.gif"
+no_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244918584266792/VIICHAN_ZERO2.gif"
 
 
 @bot.event
