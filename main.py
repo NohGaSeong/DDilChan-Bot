@@ -16,9 +16,12 @@ Token = os.getenv('Token')
 
 embed=discord.Embed(timestamp=datetime.now(pytz.timezone('UTC')), color=0x54b800)
 
-vivichan = "https://media.tenor.com/YLVttql_kgIAAAAC/%E3%82%94%E3%81%83%E3%81%A1%E3%82%83%E3%82%93-viichan.gif"
-vivivichan = "https://media.tenor.com/INrkO7KEe3QAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
-many_metting_vichan = "https://media.tenor.com/L9C-SHIR2AQAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
+
+
+many_metting_vichan_gif = "https://media.tenor.com/L9C-SHIR2AQAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
+many_many_metting_vichan_gif = "https://media.tenor.com/INrkO7KEe3QAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
+one_metting_vichan_gif = "https://media.tenor.com/INrkO7KEe3QAAAAd/%EB%B9%84%EC%B1%A4-viichan.gif"
+no_metting_vichan_gif = "https://media.tenor.com/YLVttql_kgIAAAAC/%E3%82%94%E3%81%83%E3%81%A1%E3%82%83%E3%82%93-viichan.gif"
 @bot.event
 async def on_ready():
     print('Logged in as')
@@ -40,6 +43,22 @@ class Menu(discord.ui.View):
     async def menu2(self, interaction: discord.Interaction, button : discord.ui.Button):
         embed = discord.Embed(color=discord.Color.random())
         embed.set_author(name=f"This is a edited embed")
+
+        if today_meet_count > 3:
+            embed.set_image(url=(many_many_metting_vichan_gif))
+            embed.add_field(name="Dill", value = "오늘은 회의로 가득한 날... 😭")
+        
+        elif today_meet_count > 1:
+            embed.set_image(url=(many_metting_vichan_gif))
+            embed.add_field(name="Dill", value = "오늘은 회의 많은 날.. 😓")
+
+        elif today_meet_count == 1:
+            embed.set_image(url=(one_metting_vichan_gif))
+            embed.add_field(name="Diil", value = "오늘의 회의 1개 뿐인 날! 🎉")
+        
+        else :
+            embed.set_image(url=(no_metting_vichan_gif))
+            embed.add_field(name="Diil", value = "오늘은 회의 없는 날! 🎊")
         
         await interaction.response.send_message(embed=embed)
     
