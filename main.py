@@ -2,8 +2,9 @@ import discord
 import os
 import asyncio
 import pytz
+import time 
 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ui import Select, View
 from dotenv import load_dotenv
 import firebase_admin
@@ -23,6 +24,8 @@ select_member = []
 load_dotenv()
 Token = os.getenv('Token')
 database_url = os.getenv('database_url')
+guild_url = os.getenv('guild_url')
+channel_url = os.getenv('channel_url')
 
 embed=discord.Embed(timestamp=datetime.now(pytz.timezone('UTC')), color=0x54b800)
 
@@ -45,7 +48,7 @@ async def on_ready():
     print(bot.user.id)
     print('------------')
     print(Token)
-    
+    every_hour_notice.start()
     dir = db.reference()
 
 class Metting_member(discord.ui.Select):
@@ -58,8 +61,8 @@ class Metting_member(discord.ui.Select):
         super().__init__(placeholder="회의 인원을 선택해주세요!", options=options, min_values=2, max_values=5, row=2)
     
     async def callback(self, interaction: discord.Interaction):
-        select_member = (','.join(self.values))
-        await interaction.response.send_message(content = f"{self.values}")
+        select_member = self.values
+        await interaction.response.send_message(content = "회의신청이 완료되었어요.")
 
 class Select(discord.ui.View):
     def __init__(self):
@@ -152,6 +155,17 @@ class Menu(discord.ui.View):
     @discord.ui.button(label="명령어", style = discord.ButtonStyle.red)
     async def menu3(self, interaction: discord.Interaction, button : discord.ui.Button):
         await interaction.response.send_message("Hello World")
+
+
+@tasks.loop(seconds=60)
+async def every_hour_notice():
+    if datetime.now().hour == 8 and datetime.now().minute == 30:
+        # database에서 값들 가지고와서 저장
+        # 이후 embed 에 추가
+        # 하루에 한번씩 꺼주기
+        await bot.get_guild(guild_url).get_channel(channel_url).send("오늘의 회의 보고합니다!")
+        # 1초 sleep하여 중복 전송 방지
+        time.sleep(1)
 
 @bot.command()
 async def 띨챤(ctx):
