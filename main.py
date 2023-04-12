@@ -118,68 +118,63 @@ async def 챤하(ctx):
 
 
 class SelectPage2(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-        self.value = None
-
     @discord.ui.select(
+            placeholder = "회의 멤버를 선택해주세요.",
             min_values = 1,
-            max_values = 3,
-            placeholder = "Choose",
-            options = [
-                discord.SelectOption(
-                    label="승민",
-                    emoji="😀",
-                    description="안드로이드"
-                ),
-                discord.SelectOption(
-                    label="현빈",
-                    emoji="😀",
-                    description="안드로이드"
-                ),
-                discord.SelectOption(
-                    label="현승",
-                    emoji="😀",
-                    description="안드로이드"
-                ),
-            ],
-            row = 2
+            max_values = 16,
+            options=[
+                discord.SelectOption(label="김시훈", description="백엔드", emoji="🐱"),
+                discord.SelectOption(label="전승원", description="백엔드", emoji="🐱"),
+                discord.SelectOption(label="윤지빈", description="백엔드", emoji="🐱"),
+                discord.SelectOption(label="조재영", description="백엔드", emoji="🐱"),
+                discord.SelectOption(label="노현주", description="백엔드", emoji="🐱"),
+                discord.SelectOption(label="박주홍", description="백엔드", emoji="🐱"),
+                discord.SelectOption(label="김희망", description="백엔드", emoji="🐱"),
+                discord.SelectOption(label="김태오", description="백엔드", emoji="🐱"),
+                discord.SelectOption(label="변찬우", description="프론트엔드", emoji="🦄"),
+                discord.SelectOption(label="강경민", description="프론트엔드", emoji="🦄"),
+                discord.SelectOption(label="박영재", description="프론트엔드", emoji="🦄"),
+                discord.SelectOption(label="송현우", description="프론트엔드", emoji="🦄"),
+                discord.SelectOption(label="서주미", description="프론트엔드", emoji="🦄"),
+                discord.SelectOption(label="이태랑", description="프론트엔드", emoji="🦄"),
+                discord.SelectOption(label="이운린", description="프론트엔드", emoji="🦄"),
+                discord.SelectOption(label="노가성", description="DevOps", emoji="🌥")
+        ]
         )
 
     async def select_callback(self, select, interaction): # the function called when the user is done selecting options
-        await select.response.send_message("회의 등록이 완료되었어요.")
+        await select.response.send_message("회의 등록이 완료됐어요.")
 
     
 class SelectPage1(discord.ui.View):
     @discord.ui.select(
-            placeholder = "Choose",
+            placeholder = "회의 멤버를 선택해주세요.",
             min_values = 1,
-            max_values = 4,
-            options = [
-                discord.SelectOption(
-                    label="승민",
-                    emoji="😀",
-                    description="안드로이드"
-                ),
-                discord.SelectOption(
-                    label="현빈",
-                    emoji="😀",
-                    description="안드로이드"
-                ),
-                discord.SelectOption(
-                    label="현승",
-                    emoji="😀",
-                    description="안드로이드"
-                ),
-                discord.SelectOption(
-                    label="다음 페이지",
-                    emoji="😀",
-                    description="다음 페이지"
-                )
+            max_values = 19,
+            options=[
+                discord.SelectOption(label="이현빈", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="김현승", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="백승민", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="박성현", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="김대진", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="정찬우", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="채종인", description="안드로이드", emoji="🤖"),
+                discord.SelectOption(label="최형우", description="IOS", emoji="🍎"),
+                discord.SelectOption(label="김성훈", description="IOS", emoji="🍎"),
+                discord.SelectOption(label="박준서", description="IOS", emoji="🍎"),
+                discord.SelectOption(label="선민재", description="IOS", emoji="🍎"),
+                discord.SelectOption(label="안강호", description="IOS", emoji="🍎"),
+                discord.SelectOption(label="정윤서", description="IOS", emoji="🍎"),
+                discord.SelectOption(label="임준화", description="IOS", emoji="🍎"),
+                discord.SelectOption(label="안진형", description="디자인", emoji="🎨"),
+                discord.SelectOption(label="김준", description="디자인", emoji="🎨"),
+                discord.SelectOption(label="강민수", description="디자인", emoji="🎨"),
+                discord.SelectOption(label="김하온", description="디자인", emoji="🎨"),
+                discord.SelectOption(label="다음페이지", description="다음 페이지로 이동합니다.", emoji="⏭")
             ]
         )
     async def select_callback(self, select, interaction):
-        if "다음 페이지" in interaction.values:
+        if "다음페이지" in interaction.values:
             view = SelectPage2()
             await select.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
         else :
