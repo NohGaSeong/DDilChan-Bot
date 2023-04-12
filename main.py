@@ -48,26 +48,144 @@ async def on_ready():
     print(bot.user.id)
     print('------------')
     print(Token)
-    every_hour_notice.start()
-    dir = db.reference()
 
-class Metting_member(discord.ui.Select):
-    def __init__(self):
-        options=[discord.SelectOption(label="이현빈", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="변찬우", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="노가성", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="정은성", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="김동현", description="안드로이드", emoji="🤖")]
-        super().__init__(placeholder="회의 인원을 선택해주세요!", options=options, min_values=2, max_values=5, row=2)
+
+@bot.command()
+async def 챤하(ctx):
+    view = Menu()
+    await ctx.reply("챤하 ~ 무엇을 도와드릴까요?", view=view)
+
+# class FavouriteGameSelect(discord.ui.Select):
+#     def __init__(self):
+#         options = [ 
+#             discord.SelectOption(label="Cs", value="cs"),
+#             discord.SelectOption(label="Minecraft", value="mc"),
+#             discord.SelectOption(label="Fortnite", value="f"),
+#         ]
+#         super().__init__(options=options, placeholder="What do you like to play?", max_values=2)
+
+#     async def callback(self, interaction:discord.Interaction):
+#         await self.view.respond_to_answer2(interaction, self.values)
+
+# class ServeyView(discord.ui.View):
+#     answer1 = None
+#     answer2 = None
+
+#     @discord.ui.select(
+#         placeholder="회의 인원을 선택해주세요!",
+#         options=[
+#         discord.SelectOption(label="이현빈", description="안드로이드", emoji="🤖"),
+#         discord.SelectOption(label="김현승", description="안드로이드", emoji="🤖"),
+#         discord.SelectOption(label="백승민", description="안드로이드", emoji="🤖")
+#         ]
+#     )
+
+#     async def select_age(self, interaction:discord.Interaction, select_item : discord.ui.Select):
+#         self.answer1 = select_item.values
+#         self.children[0].disabled= True
+#         game_select = FavouriteGameSelect()
+#         self.add_item(game_select)
+#         await interaction.message.edit(view=self)
+#         await interaction.response.defer()
+
+#     async def respond_to_answer2(self, interaction : discord.Interaction, choices):
+#         self.answer2 = choices 
+#         self.children[1].disabled= True
+#         await interaction.message.edit(view=self)
+#         await interaction.response.defer()
+#         self.stop()
+
+
+# class Member_select(discord.ui.View):
+#     def __init__(self):
+#         super().__init()
+#         self.value = None
     
-    async def callback(self, interaction: discord.Interaction):
-        select_member = self.values
-        await interaction.response.send_message(content = "회의신청이 완료되었어요.")
+#     @discord.ui.select(
+#         placeholder="hi",
+#         options = [
+#             discord.SelectOption(label="1", value ="1"),
+#             discord.SelectOption(label="2", value ="2"),
+#             discord.SelectOption(label="3", value ="3")
+#         ],
+#         min_values = 2,
+#         max_values = 3,
+#         row = 2
+#     )
 
-class Select(discord.ui.View):
+#     async def callback(interaction:discord.Interaction):
+#         await interaction.response.send_message("Hello World!")
+
+
+class SelectPage2(discord.ui.View):
     def __init__(self):
         super().__init__()
-        self.add_item(Metting_member())
+        self.value = None
+
+    @discord.ui.select(
+            min_values = 1,
+            max_values = 3,
+            placeholder = "Choose",
+            options = [
+                discord.SelectOption(
+                    label="승민",
+                    emoji="😀",
+                    description="안드로이드"
+                ),
+                discord.SelectOption(
+                    label="현빈",
+                    emoji="😀",
+                    description="안드로이드"
+                ),
+                discord.SelectOption(
+                    label="현승",
+                    emoji="😀",
+                    description="안드로이드"
+                ),
+            ],
+            row = 2
+        )
+
+    async def select_callback(self, select, interaction): # the function called when the user is done selecting options
+        await select.response.send_message("회의 등록이 완료되었어요.")
+
+    
+class SelectPage1(discord.ui.View):
+    @discord.ui.select(
+            placeholder = "Choose",
+            min_values = 1,
+            max_values = 4,
+            options = [
+                discord.SelectOption(
+                    label="승민",
+                    emoji="😀",
+                    description="안드로이드"
+                ),
+                discord.SelectOption(
+                    label="현빈",
+                    emoji="😀",
+                    description="안드로이드"
+                ),
+                discord.SelectOption(
+                    label="현승",
+                    emoji="😀",
+                    description="안드로이드"
+                ),
+                discord.SelectOption(
+                    label="다음 페이지",
+                    emoji="😀",
+                    description="다음 페이지"
+                )
+            ]
+        )
+    async def select_callback(self, select, interaction):
+        if "다음 페이지" in interaction.values:
+            view = SelectPage2()
+            await select.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+        else :
+            await select.response.send_message("회의 등록이 완료되었어요.")
+
+        
 
 class Metting_time(discord.ui.View):
     def __init__(self):
@@ -76,11 +194,11 @@ class Metting_time(discord.ui.View):
 
     @discord.ui.button(label= "아침시간", style=discord.ButtonStyle.grey)
     async def metting_time_1(self, interaction:discord.Interaction, button:discord.ui.button):
-        global metting_time
-
-        view = Select()
-        meeting_time = "아침시간"
+        view = SelectPage1()
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+
+        
+
 
 class Metting_place(discord.ui.View):
     def __init__(self):
@@ -94,6 +212,7 @@ class Metting_place(discord.ui.View):
         view = Metting_time()
         meeting_place = "2층 홈베이스"
         await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
+
 
 
 class Menu(discord.ui.View):
@@ -155,22 +274,6 @@ class Menu(discord.ui.View):
     @discord.ui.button(label="명령어", style = discord.ButtonStyle.red)
     async def menu3(self, interaction: discord.Interaction, button : discord.ui.Button):
         await interaction.response.send_message("Hello World")
-
-
-@tasks.loop(seconds=60)
-async def every_hour_notice():
-    if datetime.now().hour == 8 and datetime.now().minute == 30:
-        # database에서 값들 가지고와서 저장
-        # 이후 embed 에 추가
-        # 하루에 한번씩 꺼주기
-        await bot.get_guild(guild_url).get_channel(channel_url).send("오늘의 회의 보고합니다!")
-        # 1초 sleep하여 중복 전송 방지
-        time.sleep(1)
-
-@bot.command()
-async def 띨챤(ctx):
-    view = Menu()
-    await ctx.reply("챤하 ~ 무엇을 도와드릴까요?", view=view)
 
 
 
