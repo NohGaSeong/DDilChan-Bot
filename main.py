@@ -11,7 +11,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
-from datetime import datetime
+from datetime import datetime,date
 
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
@@ -20,7 +20,9 @@ db_count = 0
 meeting_subject = ""
 meeting_time = ""
 meeting_place = ""
-select_member = []
+meeting_member = []
+
+
 
 load_dotenv()
 Token = os.getenv('Token')
@@ -50,6 +52,11 @@ async def on_ready():
     print(bot.user.id)
     print('------------')
     print(Token)
+    
+    ref = str(date.today())
+    ref_cut = ref[5:10]
+    print(ref_cut)
+
 
 @bot.command()
 async def 챤하(ctx):
@@ -83,12 +90,20 @@ class SelectPage2(discord.ui.View):
 
     async def select_callback(self, select, interaction):
         global db_count
+        global meeting_member
 
-        db_count += 1
+        print(interaction.values)
+        meeting_member += interaction.values
+        meeting_member.remove("다음페이지")
+        print(meeting_member)
         
+        db_count += 1
         ref =  db.reference(meeting_date + "/" + str(db_count))
-        ref.update({'멤버':'왈랄랄루'})
-        ref.update({'시간':'04.25'})
+        ref.update({'주제': str(meeting_subject)})
+        ref.update({'날짜': str(meeting_date)})
+        ref.update({'시간': meeting_time})
+        ref.update({'장소': meeting_place})
+        ref.update({'멤버': meeting_member})
         await select.response.send_message("회의 등록이 완료됐어요.")
 
     
@@ -121,6 +136,11 @@ class SelectPage1(discord.ui.View):
         )
     async def select_callback(self, select, interaction):
         global db_count
+        global meeting_member
+
+        meeting_member = interaction.values
+
+        print(meeting_member)
 
         if "다음페이지" in interaction.values:
             view = SelectPage2()
@@ -128,8 +148,11 @@ class SelectPage1(discord.ui.View):
         else :
             db_count += 1
             ref =  db.reference(meeting_date + "/" + str(db_count))
-            ref.update({'멤버':'왈랄랄루'})
-            ref.update({'시간':'04.25'})
+            ref.update({'주제': str(meeting_subject)})
+            ref.update({'날짜': str(meeting_date)})
+            ref.update({'시간': meeting_time})
+            ref.update({'장소': meeting_place})
+            ref.update({'멤버': meeting_member})
             await select.response.send_message("회의 등록이 완료되었어요.")
 
         
@@ -143,8 +166,9 @@ class Metting_time(discord.ui.View):
     async def metting_time_1(self, interaction:discord.Interaction, button:discord.ui.button):
         global meeting_time
 
-        meeting_time = "아침시간"
         view = SelectPage1()
+        meeting_time = "아침시간"
+
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
         
@@ -187,7 +211,7 @@ class Menu(discord.ui.View):
 
         else :
             meeting_subject = message.content
-            await message.channel.send(content= "회의할 날짜를 말해주세요. 이때 4-14 같은 형식으로 입력해주셔야해요!")
+            await message.channel.send(content= "회의할 날짜를 말해주세요. 이때 04-14 같은 형식으로 입력해주셔야해요!")
             
             try:
                 message = await bot.wait_for("message", check=lambda message: interaction.user == member, timeout=15.0)
@@ -195,8 +219,11 @@ class Menu(discord.ui.View):
                 await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
             else:
                 meeting_date = message.content
-                view = Metting_place()
-                await message.channel.send(content = "회의할 장소를 선택해주세요.", view=view)
+                if len(meeting_date) != 15 or meeting_date[3:3] != "-":
+                    await message.channel.send("잘못된 정보를 입력하셨어요. 명령어를 다시 실행시켜주세요.")
+                else:   
+                    view = Metting_place()
+                    await message.channel.send(content = "회의할 장소를 선택해주세요.", view=view)
 
 
 
