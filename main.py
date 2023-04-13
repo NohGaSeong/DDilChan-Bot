@@ -16,6 +16,7 @@ from datetime import datetime
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 today_meet_count = 0
+db_count = 0
 meeting_subject = ""
 meeting_time = ""
 meeting_place = ""
@@ -35,6 +36,7 @@ firebase_admin.initialize_app(cred, {
 })
 
 
+
 many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923550302208/WASTED.png"
 many_many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923034415114/CRYING_CHAN2.gif"
 one_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244921922924544/RUNNING_CHAN.gif"
@@ -49,73 +51,10 @@ async def on_ready():
     print('------------')
     print(Token)
 
-
 @bot.command()
 async def 챤하(ctx):
     view = Menu()
     await ctx.reply("챤하 ~ 무엇을 도와드릴까요?", view=view)
-
-# class FavouriteGameSelect(discord.ui.Select):
-#     def __init__(self):
-#         options = [ 
-#             discord.SelectOption(label="Cs", value="cs"),
-#             discord.SelectOption(label="Minecraft", value="mc"),
-#             discord.SelectOption(label="Fortnite", value="f"),
-#         ]
-#         super().__init__(options=options, placeholder="What do you like to play?", max_values=2)
-
-#     async def callback(self, interaction:discord.Interaction):
-#         await self.view.respond_to_answer2(interaction, self.values)
-
-# class ServeyView(discord.ui.View):
-#     answer1 = None
-#     answer2 = None
-
-#     @discord.ui.select(
-#         placeholder="회의 인원을 선택해주세요!",
-#         options=[
-#         discord.SelectOption(label="이현빈", description="안드로이드", emoji="🤖"),
-#         discord.SelectOption(label="김현승", description="안드로이드", emoji="🤖"),
-#         discord.SelectOption(label="백승민", description="안드로이드", emoji="🤖")
-#         ]
-#     )
-
-#     async def select_age(self, interaction:discord.Interaction, select_item : discord.ui.Select):
-#         self.answer1 = select_item.values
-#         self.children[0].disabled= True
-#         game_select = FavouriteGameSelect()
-#         self.add_item(game_select)
-#         await interaction.message.edit(view=self)
-#         await interaction.response.defer()
-
-#     async def respond_to_answer2(self, interaction : discord.Interaction, choices):
-#         self.answer2 = choices 
-#         self.children[1].disabled= True
-#         await interaction.message.edit(view=self)
-#         await interaction.response.defer()
-#         self.stop()
-
-
-# class Member_select(discord.ui.View):
-#     def __init__(self):
-#         super().__init()
-#         self.value = None
-    
-#     @discord.ui.select(
-#         placeholder="hi",
-#         options = [
-#             discord.SelectOption(label="1", value ="1"),
-#             discord.SelectOption(label="2", value ="2"),
-#             discord.SelectOption(label="3", value ="3")
-#         ],
-#         min_values = 2,
-#         max_values = 3,
-#         row = 2
-#     )
-
-#     async def callback(interaction:discord.Interaction):
-#         await interaction.response.send_message("Hello World!")
-
 
 class SelectPage2(discord.ui.View):
     @discord.ui.select(
@@ -142,7 +81,14 @@ class SelectPage2(discord.ui.View):
         ]
         )
 
-    async def select_callback(self, select, interaction): # the function called when the user is done selecting options
+    async def select_callback(self, select, interaction):
+        global db_count
+
+        db_count += 1
+        
+        ref =  db.reference(meeting_date + "/" + str(db_count))
+        ref.update({'멤버':'왈랄랄루'})
+        ref.update({'시간':'04.25'})
         await select.response.send_message("회의 등록이 완료됐어요.")
 
     
@@ -174,10 +120,16 @@ class SelectPage1(discord.ui.View):
             ]
         )
     async def select_callback(self, select, interaction):
+        global db_count
+
         if "다음페이지" in interaction.values:
             view = SelectPage2()
             await select.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
         else :
+            db_count += 1
+            ref =  db.reference(meeting_date + "/" + str(db_count))
+            ref.update({'멤버':'왈랄랄루'})
+            ref.update({'시간':'04.25'})
             await select.response.send_message("회의 등록이 완료되었어요.")
 
         
@@ -189,6 +141,9 @@ class Metting_time(discord.ui.View):
 
     @discord.ui.button(label= "아침시간", style=discord.ButtonStyle.grey)
     async def metting_time_1(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+
+        meeting_time = "아침시간"
         view = SelectPage1()
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
@@ -219,6 +174,7 @@ class Menu(discord.ui.View):
     async def menu1(self, interaction: discord.Interaction, button: discord.ui.Button):
         global meeting_subject
         global message
+        global meeting_date
 
         view = Metting_place()
         member = interaction.user
@@ -231,7 +187,7 @@ class Menu(discord.ui.View):
 
         else :
             meeting_subject = message.content
-            await message.channel.send(content= "회의할 날짜를 말해주세요")
+            await message.channel.send(content= "회의할 날짜를 말해주세요. 이때 4-14 같은 형식으로 입력해주셔야해요!")
             
             try:
                 message = await bot.wait_for("message", check=lambda message: interaction.user == member, timeout=15.0)
