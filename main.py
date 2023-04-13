@@ -171,8 +171,78 @@ class Metting_time(discord.ui.View):
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
-        
+    @discord.ui.button(label= "점심시간", style=discord.ButtonStyle.grey)
+    async def metting_time_2(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
 
+        view = SelectPage1()
+        meeting_time = "점심시간"
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+    
+    @discord.ui.button(label= "저녁시간", style=discord.ButtonStyle.grey)
+    async def metting_time_3(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+
+        view = SelectPage1()
+        meeting_time = "저녁시간"
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+
+    @discord.ui.button(label= "7교시", style=discord.ButtonStyle.grey)
+    async def metting_time_4(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+
+        view = SelectPage1()
+        meeting_time = "7교시"
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+
+    @discord.ui.button(label= "8교시", style=discord.ButtonStyle.grey)
+    async def metting_time_5(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+
+        view = SelectPage1()
+        meeting_time = "8교시"
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+    
+    @discord.ui.button(label= "9교시", style=discord.ButtonStyle.grey)
+    async def metting_time_6(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+
+        view = SelectPage1()
+        meeting_time = "9교시"
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+
+    @discord.ui.button(label= "10교시", style=discord.ButtonStyle.grey)
+    async def metting_time_7(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+
+        view = SelectPage1()
+        meeting_time = "10교시"
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+
+    
+    @discord.ui.button(label= "11교시", style=discord.ButtonStyle.grey)
+    async def metting_time_8(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+
+        view = SelectPage1()
+        meeting_time = "11교시"
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
+        
+    @discord.ui.button(label= "기숙사 자습시간", style=discord.ButtonStyle.grey)
+    async def metting_time_9(self, interaction:discord.Interaction, button:discord.ui.button):
+        global meeting_time
+
+        view = SelectPage1()
+        meeting_time = "기숙사 자습시간"
+
+        await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
 class Metting_place(discord.ui.View):
     def __init__(self):
@@ -186,8 +256,46 @@ class Metting_place(discord.ui.View):
         view = Metting_time()
         meeting_place = "2층 홈베이스"
         await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
+    
+    @discord.ui.button(label="3층 홈베이스", style=discord.ButtonStyle.grey)
+    async def metting_place_2(self, interaction:discord.Interaction, button : discord.ui.button):
+        global meeting_place
 
+        view = Metting_time()
+        meeting_place = "3층 홈베이스"
+        await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
 
+    @discord.ui.button(label="4층 홈베이스", style=discord.ButtonStyle.grey)
+    async def metting_place_3(self, interaction:discord.Interaction, button : discord.ui.button):
+        global meeting_place
+
+        view = Metting_time()
+        meeting_place = "4층 홈베이스"
+        await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
+
+    @discord.ui.button(label="빅데이터실", style=discord.ButtonStyle.grey)
+    async def metting_place_4(self, interaction:discord.Interaction, button : discord.ui.button):
+        global meeting_place
+
+        view = Metting_time()
+        meeting_place = "빅데이터실"
+        await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
+
+    @discord.ui.button(label="컴플렉스존", style=discord.ButtonStyle.grey)
+    async def metting_place_5(self, interaction:discord.Interaction, button : discord.ui.button):
+        global meeting_place
+
+        view = Metting_time()
+        meeting_place = "컴플렉스존"
+        await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
+
+    @discord.ui.button(label="기숙사 자습실", style=discord.ButtonStyle.grey)
+    async def metting_place_6(self, interaction:discord.Interaction, button : discord.ui.button):
+        global meeting_place
+
+        view = Metting_time()
+        meeting_place = "기숙사 자습실"
+        await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
 
 class Menu(discord.ui.View):
     def __init__(self):
@@ -219,7 +327,7 @@ class Menu(discord.ui.View):
                 await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
             else:
                 meeting_date = message.content
-                if len(meeting_date) != 15 or meeting_date[3:3] != "-":
+                if len(meeting_date) != 5 or meeting_date[2:3] != "-":
                     await message.channel.send("잘못된 정보를 입력하셨어요. 명령어를 다시 실행시켜주세요.")
                 else:   
                     view = Metting_place()
