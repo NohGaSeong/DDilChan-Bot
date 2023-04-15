@@ -39,23 +39,43 @@ firebase_admin.initialize_app(cred, {
 
 
 
-many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923550302208/WASTED.png"
-many_many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923034415114/CRYING_CHAN2.gif"
+many_many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923550302208/WASTED.png"
+many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923034415114/CRYING_CHAN2.gif"
 one_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244921922924544/RUNNING_CHAN.gif"
 no_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244918584266792/VIICHAN_ZERO2.gif"
 
 
 @bot.event
 async def on_ready():
+    global today_meet_count
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------------')
     print(Token)
     
-    ref = str(date.today())
-    ref_cut = ref[5:10]
-    print(ref_cut)
+    ref_today = str(date.today())
+    ref_today_cut = ref_today[5:10]
+    count = 0
+
+    ref = db.reference(f"{ref_today_cut}")
+
+    ref_get = ref.get()
+    print(ref_get)
+    print(len(ref_get) - 1)
+    print((ref_get[1]).get('멤버'))
+
+    member_list = ""
+    
+    print(ref_get[1].get('주제'))
+    for i in range(len(ref_get)-1):
+        embed.add_field(name=f"{ref_get[i+1].get('주제')}", value = f"{ref_get[i+1].get('멤버')}")
+        today_meet_count += 1
+        # for i in ref_get[1].get('멤버') : 
+
+    
+        
+    
 
 
 @bot.command()
@@ -341,6 +361,7 @@ class Menu(discord.ui.View):
 
         if today_meet_count > 3:
             embed.set_image(url=(many_many_metting_vichan_gif))
+
             on_embed_text = "오늘은 회의로 가득한 날... 😭"
         
         elif today_meet_count > 1:
