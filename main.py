@@ -45,8 +45,15 @@ firebase_admin.initialize_app(cred, {
     'databaseURL' : database_url
 })
 
+ref_today = str(date.today())
+    
+ref_today_cut = ref_today[5:10]
 
+ref = db.reference(f"{ref_today_cut}")
+ref_get = ref.get()
 
+member_dict = db.reference('멤버 아이디')
+member_dict_get = member_dict.get()
 
 @bot.event
 async def on_ready():
@@ -56,13 +63,7 @@ async def on_ready():
     print(bot.user.id)
     print('------------')
     print(Token)
-    
-    ref_today = str(date.today())
-    ref_today_cut = ref_today[5:10]
-
-    ref = db.reference(f"{ref_today_cut}")
-
-    ref_get = ref.get()
+    print(member_dict_get)
 
     for i in range(len(ref_get)-1):
         embed.add_field(name=f"{ref_get[i+1].get('주제')}", 
@@ -382,16 +383,57 @@ class Menu(discord.ui.View):
     async def menu3(self, interaction: discord.Interaction, button : discord.ui.Button):
         await interaction.response.send_message("Hello World")
 
-@tasks.loop(seconds=60)
+@tasks.loop(seconds=10)
 async def every_hour_notice():
-    global channel_url
-    global guild_url
+    channel = bot.get_channel(int(channel_url))
 
     if datetime.now().hour == 8 and datetime.now().minute == 00:
-        channel = bot.get_channel(int(channel_url))
         await channel.send(content = "오늘의 회의 보고합니다!\n다들 오늘 하루도 화이팅하세요!", embed=embed)
         await channel.send("https://img.animalplanet.co.kr/news/2019/08/10/700/v4q0b0ff4hcpew1g6t39.jpg")
         time.sleep(1)
+    
+    for i in range(len(ref_get)-1):
+        match ref_get[i+1].get('시간'):
+            case '아침시간':
+                if datetime.now().hour == 16 and datetime.now().minute == 23:
+                    for i in range(len(ref_get)-1) :
+                        print(ref_get[i+1].get('멤버'))
+                        print("hello")
+            case '점심시간':
+                if datetime.now().hour == 13 and datetime.now().minute == 0:
+                    await channel.send("점심시간 알림")
+            case '저녁시간':
+                if datetime.now().hour == 18 and datetime.now().minute == 0:
+                    await channel.send("저녁시간 알림이야")
+            case '7교시':
+                if datetime.now().hour == 17 and datetime.now().minute == 52:
+                    print(ref_get[i+1].get('멤버'))
+                    for j in ref_get[i+1].get('멤버'):
+                        print(j)
+                        user_id = member_dict_get.get(j)
+                        print(user_id)
+                        user = bot.get_user(int(user_id))
+                        print(user)
+                        await user.send("테스트")
+                    # for j in range(len(ref_get[i+1].get('멤버'))):
+                    #     ref_get[j+1].get('멤버')
+                        
+            case '8교시':
+                if datetime.now().hour == 16 and datetime.now().minute == 35:
+                    await channel.send("10교시 알람이야!")
+            case '9교시':
+                if datetime.now().hour == 17 and datetime.now().minute == 25:
+                    await channel.send("10교시 알람이야!")
+            case '10교시':
+                if datetime.now().hour == 14 and datetime.now().minute == 49:
+                    await channel.send("10교시 알람이야!")
+            case '11교시':
+                if datetime.now().hour == 14 and datetime.now().minute == 51:
+                    await channel.send("11교시 알람이야!")
+            
+
+        
+
 
 
 bot.run(Token)
