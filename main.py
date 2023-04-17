@@ -3,6 +3,7 @@ import os
 import asyncio
 import pytz
 import time 
+import requests
 
 from discord.ext import commands, tasks
 from discord.ui import Select, View
@@ -15,6 +16,8 @@ from datetime import datetime,date
 
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+
+
 today_meet_count = 0
 db_count = 0
 meeting_subject = ""
@@ -29,6 +32,11 @@ Token = os.getenv('Token')
 database_url = os.getenv('database_url')
 guild_url = os.getenv('guild_url')
 channel_url = os.getenv('channel_url')
+many_many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923550302208/WASTED.png"
+many_metting_vichan_gif = os.getenv('many_metting_vichan_gif')
+one_metting_vichan_gif = os.getenv('one_metting_vichan_gif')
+no_metting_vichan_gif = os.getenv('no_metting_vichan_gif')
+
 
 embed=discord.Embed(timestamp=datetime.now(pytz.timezone('UTC')), color=0x54b800)
 
@@ -38,11 +46,6 @@ firebase_admin.initialize_app(cred, {
 })
 
 
-
-many_many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923550302208/WASTED.png"
-many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244923034415114/CRYING_CHAN2.gif"
-one_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244921922924544/RUNNING_CHAN.gif"
-no_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775262167111/1095244918584266792/VIICHAN_ZERO2.gif"
 
 
 @bot.event
@@ -56,27 +59,24 @@ async def on_ready():
     
     ref_today = str(date.today())
     ref_today_cut = ref_today[5:10]
-    count = 0
 
     ref = db.reference(f"{ref_today_cut}")
 
     ref_get = ref.get()
-    print(ref_get)
-    print(len(ref_get) - 1)
-    print((ref_get[1]).get('멤버'))
 
-    member_list = ""
-    
-    print(ref_get[1].get('주제'))
     for i in range(len(ref_get)-1):
-        embed.add_field(name=f"{ref_get[i+1].get('주제')}", value = f"{ref_get[i+1].get('멤버')}")
+        embed.add_field(name=f"{ref_get[i+1].get('주제')}", 
+                        value = f"날짜 : {ref_get[i+1].get('날짜')}\n"
+                            + f"회의시간: {ref_get[i+1].get('시간')}\n"
+                            + f"회의장소: {ref_get[i+1].get('장소')}\n"
+                            + f"참석인원: {ref_get[i+1].get('멤버')}\n",
+                        inline=False)
         today_meet_count += 1
-        # for i in ref_get[1].get('멤버') : 
 
+    every_hour_notice.start()
+    
     
         
-    
-
 
 @bot.command()
 async def 챤하(ctx):
@@ -382,7 +382,16 @@ class Menu(discord.ui.View):
     async def menu3(self, interaction: discord.Interaction, button : discord.ui.Button):
         await interaction.response.send_message("Hello World")
 
+@tasks.loop(seconds=60)
+async def every_hour_notice():
+    global channel_url
+    global guild_url
 
+    if datetime.now().hour == 8 and datetime.now().minute == 00:
+        channel = bot.get_channel(int(channel_url))
+        await channel.send(content = "오늘의 회의 보고합니다!\n다들 오늘 하루도 화이팅하세요!", embed=embed)
+        await channel.send("https://img.animalplanet.co.kr/news/2019/08/10/700/v4q0b0ff4hcpew1g6t39.jpg")
+        time.sleep(1)
 
 
 bot.run(Token)
