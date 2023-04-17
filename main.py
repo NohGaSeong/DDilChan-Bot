@@ -64,7 +64,9 @@ async def on_ready():
     print('------------')
     print(Token)
     print(member_dict_get)
-
+    active = discord.Game("!띨챤 으로 회의준비")
+    await bot.change_presence(status=discord.Status.idle, activity=active)
+    
     for i in range(len(ref_get)-1):
         embed.add_field(name=f"{ref_get[i+1].get('주제')}", 
                         value = f"날짜 : {ref_get[i+1].get('날짜')}\n"
