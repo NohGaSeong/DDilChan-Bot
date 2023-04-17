@@ -318,6 +318,7 @@ class Metting_place(discord.ui.View):
         meeting_place = "기숙사 자습실"
         await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
 
+
 class Menu(discord.ui.View):
     def __init__(self):
         super().__init__()
@@ -379,9 +380,9 @@ class Menu(discord.ui.View):
         
         await interaction.response.send_message(content=on_embed_text, embed=embed)
     
-    @discord.ui.button(label="명령어", style = discord.ButtonStyle.red)
+    @discord.ui.button(label="이슈보고", style = discord.ButtonStyle.red)
     async def menu3(self, interaction: discord.Interaction, button : discord.ui.Button):
-        await interaction.response.send_message("Hello World")
+        await interaction.response.send_message("디스코드:가성#7216\n깃허브:NohGaSeong/DDilChan-Bot\n로 부탁드려요!")
 
 @tasks.loop(seconds=10)
 async def every_hour_notice():
@@ -392,46 +393,58 @@ async def every_hour_notice():
         await channel.send("https://img.animalplanet.co.kr/news/2019/08/10/700/v4q0b0ff4hcpew1g6t39.jpg")
         time.sleep(1)
     
-    for i in range(len(ref_get)-1):
+    for i in range(len(ref_get)-1): 
+
         match ref_get[i+1].get('시간'):
             case '아침시간':
-                if datetime.now().hour == 16 and datetime.now().minute == 23:
+                if datetime.now().hour == 8 and datetime.now().minute == 0:
                     for i in range(len(ref_get)-1) :
-                        print(ref_get[i+1].get('멤버'))
-                        print("hello")
+                        user_id = member_dict_get.get(j)
+                        user = bot.get_user(int(user_id))
+                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
             case '점심시간':
                 if datetime.now().hour == 13 and datetime.now().minute == 0:
-                    await channel.send("점심시간 알림")
+                    for j in ref_get[i+1].get('멤버'):
+                        user_id = member_dict_get.get(j)
+                        user = bot.get_user(int(user_id))
+                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
             case '저녁시간':
                 if datetime.now().hour == 18 and datetime.now().minute == 0:
-                    await channel.send("저녁시간 알림이야")
-            case '7교시':
-                if datetime.now().hour == 17 and datetime.now().minute == 52:
-                    print(ref_get[i+1].get('멤버'))
                     for j in ref_get[i+1].get('멤버'):
-                        print(j)
                         user_id = member_dict_get.get(j)
-                        print(user_id)
                         user = bot.get_user(int(user_id))
-                        print(user)
-                        await user.send("테스트")
-                    # for j in range(len(ref_get[i+1].get('멤버'))):
-                    #     ref_get[j+1].get('멤버')
-                        
+                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+            case '7교시':
+                if datetime.now().hour == 15 and datetime.now().minute == 25:
+                    for j in ref_get[i+1].get('멤버'):
+                        user_id = member_dict_get.get(j)
+                        user = bot.get_user(int(user_id))
+                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
             case '8교시':
                 if datetime.now().hour == 16 and datetime.now().minute == 35:
-                    await channel.send("10교시 알람이야!")
+                    for j in ref_get[i+1].get('멤버'):
+                        user_id = member_dict_get.get(j)
+                        user = bot.get_user(int(user_id))
+                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
             case '9교시':
                 if datetime.now().hour == 17 and datetime.now().minute == 25:
-                    await channel.send("10교시 알람이야!")
+                    for j in ref_get[i+1].get('멤버'):
+                        user_id = member_dict_get.get(j)
+                        user = bot.get_user(int(user_id))
+                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
             case '10교시':
                 if datetime.now().hour == 14 and datetime.now().minute == 49:
-                    await channel.send("10교시 알람이야!")
+                    for j in ref_get[i+1].get('멤버'):
+                        user_id = member_dict_get.get(j)
+                        user = bot.get_user(int(user_id))
+                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
             case '11교시':
                 if datetime.now().hour == 14 and datetime.now().minute == 51:
-                    await channel.send("11교시 알람이야!")
+                    for j in ref_get[i+1].get('멤버'):
+                        user_id = member_dict_get.get(j)
+                        user = bot.get_user(int(user_id))
+                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
             
-
         
 
 
