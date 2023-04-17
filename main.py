@@ -66,7 +66,7 @@ async def on_ready():
     print(member_dict_get)
     active = discord.Game("!띨챤 으로 회의준비")
     await bot.change_presence(status=discord.Status.idle, activity=active)
-    
+
     for i in range(len(ref_get)-1):
         embed.add_field(name=f"{ref_get[i+1].get('주제')}", 
                         value = f"날짜 : {ref_get[i+1].get('날짜')}\n"
@@ -382,15 +382,15 @@ class Menu(discord.ui.View):
         
         await interaction.response.send_message(content=on_embed_text, embed=embed)
     
-    @discord.ui.button(label="이슈보고", style = discord.ButtonStyle.red)
+    @discord.ui.button(label="이슈보고 및 깃허브", style = discord.ButtonStyle.red)
     async def menu3(self, interaction: discord.Interaction, button : discord.ui.Button):
-        await interaction.response.send_message("디스코드:가성#7216\n깃허브:NohGaSeong/DDilChan-Bot\n로 부탁드려요!")
+        await interaction.response.send_message("디스코드:가성#7216\n깃허브:NohGaSeong/DDilChan-Bot\n로 이슈 제보 및 코드 리뷰 부탁드려요!")
 
 @tasks.loop(seconds=10)
 async def every_hour_notice():
     channel = bot.get_channel(int(channel_url))
 
-    if datetime.now().hour == 8 and datetime.now().minute == 00:
+    if datetime.now().hour == 8 and datetime.now().minute == 0:
         await channel.send(content = "오늘의 회의 보고합니다!\n다들 오늘 하루도 화이팅하세요!", embed=embed)
         await channel.send("https://img.animalplanet.co.kr/news/2019/08/10/700/v4q0b0ff4hcpew1g6t39.jpg")
         time.sleep(1)
