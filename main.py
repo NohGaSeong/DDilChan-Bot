@@ -432,7 +432,7 @@ class Menu(discord.ui.View):
         await interaction.response.send_message("디스코드:가성#7216\n깃허브:NohGaSeong/DDilChan-Bot\n로 이슈 제보 및 코드 리뷰 부탁드려요!")
 
 ###### 백그라운드 함수 ######
-@tasks.loop(seconds=20)
+@tasks.loop(seconds=60)
 async def every_hour_notice():
     channel = bot.get_channel(int(channel_url))
 
@@ -450,9 +450,9 @@ async def every_hour_notice():
 
         match ref_get[i+1].get('시간'):
             case '아침시간':
-                if datetime.now().hour == 17 and datetime.now().minute == 12:
+                if datetime.now().hour == 7 and datetime.now().minute == 55:
                     await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                if datetime.now().hour == 17 and datetime.now().minute == 55:
+                if datetime.now().hour == 8 and datetime.now().minute == 0:
                     await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
             case '점심시간':
                 if datetime.now().hour == 12 and datetime.now().minute == 55:
