@@ -15,17 +15,6 @@ from datetime import datetime,date
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
-###### 기본적으로 사용하는 변수 선언 ######
-today_meet_count = 0
-db_count = 0
-
-meeting_subject = ""
-meeting_time = ""
-meeting_place = ""
-meeting_member = []
-meeting_member_check = []
-
-
 ###### .env 관련 변수 ######
 load_dotenv()
 Token = os.getenv('Token')
@@ -36,6 +25,16 @@ many_many_metting_vichan_gif = "https://cdn.discordapp.com/attachments/953156775
 many_metting_vichan_gif = os.getenv('many_metting_vichan_gif')
 one_metting_vichan_gif = os.getenv('one_metting_vichan_gif')
 no_metting_vichan_gif = os.getenv('no_metting_vichan_gif')
+
+###### 기본적으로 사용하는 변수 선언 ######
+today_meet_count = 0
+db_count = 0
+
+meeting_subject = ""
+meeting_time = ""
+meeting_place = ""
+meeting_member = []
+meeting_member_check = []
 
 ###### 봇 임베드 추가 ######
 embed=discord.Embed(timestamp=datetime.now(pytz.timezone('UTC')), color=0x54b800)
@@ -85,8 +84,6 @@ async def on_ready():
     print(bot.user.id)
     print('------------')
     print(Token)
-    print(member_dict_get)
-    print(options_count_2)
     active = discord.Game("!띨챤 으로 회의준비")
     await bot.change_presence(status=discord.Status.idle, activity=active)
 
@@ -297,7 +294,31 @@ class Metting_place(discord.ui.View):
         meeting_place = "기숙사 자습실"
         await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
 
-###### 회의 알림 View ######
+###### 회의 알림 View ######(
+class Meeting_opinion_button(discord.ui.View):
+
+    def __init__(self):
+        super().__init__()
+        self.value = None
+
+    @discord.ui.button(label="참가했는뎁요..?", style=discord.ButtonStyle.grey)
+    async def opinion_button_1(self, interaction: discord.Interaction, button: discord.ui.Button):
+        channel = bot.get_channel(int(channel_url))
+        await interaction.response.send_message(content = "장난치지말라고 전해줄게요!")
+        await channel.send(f"{interaction.user} 님에게 장난치지마세요!")
+    
+    @discord.ui.button(label="가고 있어요!", style=discord.ButtonStyle.grey)
+    async def opinion_button_2(self, interaction: discord.Interaction, button : discord.ui.Button):
+        channel = bot.get_channel(int(channel_url))
+        await interaction.response.send_message(content = "빨리 와주세요!")
+        await channel.send(f"{interaction.user} 님은 가고 있어요 라고 반응하셨어요!")
+    
+    @discord.ui.button(label="불참이에요.", style=discord.ButtonStyle.red)
+    async def opinion_button_3(self, interaction: discord.Interaction, button : discord.ui.Button):
+        channel = bot.get_channel(int(channel_url))
+        await interaction.response.send_message(content = "다음부턴 미리 말해주세요...!")
+        await channel.send(f"{interaction.user} 님은 불참이라고 반응하셨어요!")
+
 class Meeting_check(discord.ui.View):
     @discord.ui.select(
         placeholder = "호출 멤버를 선택해주세요.",
@@ -316,9 +337,9 @@ class Meeting_check(discord.ui.View):
             await select.response.send_message(content = "회의에 호출할 멤버를 선택해주세요.", view=view)
         else :
             for i in meeting_member:
-                # user_id = member_dict_get.get(j)
-                # user = bot.get_user(int(user_id))
-                print(i)
+                user_id = member_dict_get.get(i)
+                user = bot.get_user(int(user_id))
+                await user.send(content = "회의 빨리와용", view = Meeting_opinion_button()) 
             await select.response.send_message("회의 호출이 완료되었어요.")
 
 class Meeting_check_2(discord.ui.View):
@@ -334,18 +355,15 @@ class Meeting_check_2(discord.ui.View):
 
         meeting_member += interaction.values
         meeting_member.remove("다음페이지")
+        view = Meeting_opinion_button()
 
         for i in meeting_member:
             user_id = member_dict_get.get(i)
             user = bot.get_user(int(user_id))
-            await user.send("회의 빨리와용")    
+            await user.send(content = "회의 빨리와용", view = view)    
         
         await select.response.send_message("회의 호출이 완료되었어요.")
     
-
-
-
-
 
 ###### !챤하's View ######
 class Menu(discord.ui.View):
@@ -434,7 +452,7 @@ async def every_hour_notice():
             case '아침시간':
                 if datetime.now().hour == 17 and datetime.now().minute == 12:
                     await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                if datetime.now().hour == 17 and datetime.now().minute == 24:
+                if datetime.now().hour == 17 and datetime.now().minute == 55:
                     await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
             case '점심시간':
                 if datetime.now().hour == 12 and datetime.now().minute == 55:
