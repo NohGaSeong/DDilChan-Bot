@@ -7,6 +7,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 .env
+member_list_1.json
+member_list_2.json
 ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json
 # C extensions
 *.so

@@ -4,6 +4,7 @@ import asyncio
 import pytz
 import time 
 import requests
+import json
 
 from discord.ext import commands, tasks
 from discord.ui import Select, View
@@ -24,6 +25,7 @@ meeting_subject = ""
 meeting_time = ""
 meeting_place = ""
 meeting_member = []
+meeting_member_check = []
 
 
 
@@ -55,6 +57,28 @@ ref_get = ref.get()
 member_dict = db.reference('멤버 아이디')
 member_dict_get = member_dict.get()
 
+options_count = 0
+options_count_2 = 0
+
+###### json 관련 코드 ######
+with open('member_list_1.json', 'r') as f:
+    json_member_1 = json.load(f)
+
+with open('member_list_2.json', 'r') as f:
+    json_member_2 = json.load(f)
+
+options = []
+options_2 = []
+
+for key, val in json_member_1.items():
+    options_count += 1
+    options.append(discord.SelectOption(label=key, description=val))
+
+for key, val in json_member_2.items():
+    options_count_2 += 1
+    options_2.append(discord.SelectOption(label=key, description=val))
+
+####### bot 시작 ######
 @bot.event
 async def on_ready():
     global today_meet_count
@@ -64,6 +88,7 @@ async def on_ready():
     print('------------')
     print(Token)
     print(member_dict_get)
+    print(options_count_2)
     active = discord.Game("!띨챤 으로 회의준비")
     await bot.change_presence(status=discord.Status.idle, activity=active)
 
@@ -77,93 +102,27 @@ async def on_ready():
         today_meet_count += 1
 
     every_hour_notice.start()
-    
-    
-        
 
+###### !챤하 ######
 @bot.command()
 async def 챤하(ctx):
     view = Menu()
     await ctx.reply("챤하 ~ 무엇을 도와드릴까요?", view=view)
 
-class SelectPage2(discord.ui.View):
-    @discord.ui.select(
-            placeholder = "회의 멤버를 선택해주세요.",
-            min_values = 1,
-            max_values = 16,
-            options=[
-                discord.SelectOption(label="김시훈", description="백엔드", emoji="🐱"),
-                discord.SelectOption(label="전승원", description="백엔드", emoji="🐱"),
-                discord.SelectOption(label="윤지빈", description="백엔드", emoji="🐱"),
-                discord.SelectOption(label="조재영", description="백엔드", emoji="🐱"),
-                discord.SelectOption(label="노현주", description="백엔드", emoji="🐱"),
-                discord.SelectOption(label="박주홍", description="백엔드", emoji="🐱"),
-                discord.SelectOption(label="김희망", description="백엔드", emoji="🐱"),
-                discord.SelectOption(label="김태오", description="백엔드", emoji="🐱"),
-                discord.SelectOption(label="변찬우", description="프론트엔드", emoji="🦄"),
-                discord.SelectOption(label="강경민", description="프론트엔드", emoji="🦄"),
-                discord.SelectOption(label="박영재", description="프론트엔드", emoji="🦄"),
-                discord.SelectOption(label="송현우", description="프론트엔드", emoji="🦄"),
-                discord.SelectOption(label="서주미", description="프론트엔드", emoji="🦄"),
-                discord.SelectOption(label="이태랑", description="프론트엔드", emoji="🦄"),
-                discord.SelectOption(label="이운린", description="프론트엔드", emoji="🦄"),
-                discord.SelectOption(label="노가성", description="DevOps", emoji="🌥")
-        ]
-        )
-
-    async def select_callback(self, select, interaction):
-        global db_count
-        global meeting_member
-
-        print(interaction.values)
-        meeting_member += interaction.values
-        meeting_member.remove("다음페이지")
-        print(meeting_member)
-        
-        db_count += 1
-        ref =  db.reference(meeting_date + "/" + str(db_count))
-        ref.update({'주제': str(meeting_subject)})
-        ref.update({'날짜': str(meeting_date)})
-        ref.update({'시간': meeting_time})
-        ref.update({'장소': meeting_place})
-        ref.update({'멤버': meeting_member})
-        await select.response.send_message("회의 등록이 완료됐어요.")
-
-    
+###### 회의 인원 선택 ######
 class SelectPage1(discord.ui.View):
     @discord.ui.select(
             placeholder = "회의 멤버를 선택해주세요.",
             min_values = 1,
-            max_values = 19,
-            options=[
-                discord.SelectOption(label="이현빈", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="김현승", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="백승민", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="박성현", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="김대진", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="정찬우", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="채종인", description="안드로이드", emoji="🤖"),
-                discord.SelectOption(label="최형우", description="IOS", emoji="🍎"),
-                discord.SelectOption(label="김성훈", description="IOS", emoji="🍎"),
-                discord.SelectOption(label="박준서", description="IOS", emoji="🍎"),
-                discord.SelectOption(label="선민재", description="IOS", emoji="🍎"),
-                discord.SelectOption(label="안강호", description="IOS", emoji="🍎"),
-                discord.SelectOption(label="정윤서", description="IOS", emoji="🍎"),
-                discord.SelectOption(label="임준화", description="IOS", emoji="🍎"),
-                discord.SelectOption(label="안진형", description="디자인", emoji="🎨"),
-                discord.SelectOption(label="김준", description="디자인", emoji="🎨"),
-                discord.SelectOption(label="강민수", description="디자인", emoji="🎨"),
-                discord.SelectOption(label="김하온", description="디자인", emoji="🎨"),
-                discord.SelectOption(label="다음페이지", description="다음 페이지로 이동합니다.", emoji="⏭")
-            ]
-        )
+            max_values = options_count,
+            options=options
+            )
     async def select_callback(self, select, interaction):
         global db_count
         global meeting_member
 
         meeting_member = interaction.values
 
-        print(meeting_member)
 
         if "다음페이지" in interaction.values:
             view = SelectPage2()
@@ -178,8 +137,31 @@ class SelectPage1(discord.ui.View):
             ref.update({'멤버': meeting_member})
             await select.response.send_message("회의 등록이 완료되었어요.")
 
-        
+class SelectPage2(discord.ui.View):
+    @discord.ui.select(
+            placeholder = "회의 멤버를 선택해주세요.",
+            min_values = 1,
+            max_values = options_count_2,
+            options=options_2
+        )
 
+    async def select_callback(self, select, interaction):
+        global db_count
+        global meeting_member
+
+        meeting_member += interaction.values
+        meeting_member.remove("다음페이지")
+        
+        db_count += 1
+        ref =  db.reference(meeting_date + "/" + str(db_count))
+        ref.update({'주제': str(meeting_subject)})
+        ref.update({'날짜': str(meeting_date)})
+        ref.update({'시간': meeting_time})
+        ref.update({'장소': meeting_place})
+        ref.update({'멤버': meeting_member})
+        await select.response.send_message("회의 등록이 완료됐어요.")
+
+###### 회의 시간 선택 ######
 class Metting_time(discord.ui.View):
     def __init__(self):
         super().__init__()
@@ -267,6 +249,7 @@ class Metting_time(discord.ui.View):
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
+###### 회의 장소 선택 ######
 class Metting_place(discord.ui.View):
     def __init__(self):
         super().__init__()
@@ -320,7 +303,7 @@ class Metting_place(discord.ui.View):
         meeting_place = "기숙사 자습실"
         await interaction.response.send_message(content= "회의할 시간을 선택해주세요", view=view)
 
-
+###### !챤하's View ######
 class Menu(discord.ui.View):
     def __init__(self):
         super().__init__()
@@ -386,7 +369,8 @@ class Menu(discord.ui.View):
     async def menu3(self, interaction: discord.Interaction, button : discord.ui.Button):
         await interaction.response.send_message("디스코드:가성#7216\n깃허브:NohGaSeong/DDilChan-Bot\n로 이슈 제보 및 코드 리뷰 부탁드려요!")
 
-@tasks.loop(seconds=10)
+###### 백그라운드 함수 ######
+@tasks.loop(seconds=20)
 async def every_hour_notice():
     channel = bot.get_channel(int(channel_url))
 
@@ -396,14 +380,16 @@ async def every_hour_notice():
         time.sleep(1)
     
     for i in range(len(ref_get)-1): 
-
+        ###### 이슈로 인해 추후 코드 최적화 예정 ######
         match ref_get[i+1].get('시간'):
             case '아침시간':
-                if datetime.now().hour == 8 and datetime.now().minute == 0:
-                    for i in range(len(ref_get)-1) :
+                if datetime.now().hour == 8 and datetime.now().minute == 17:
+                    for j in ref_get[i+1].get('멤버') :
                         user_id = member_dict_get.get(j)
                         user = bot.get_user(int(user_id))
                         await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                if datetime.now().hour == 8 and datetime.now().minute == 0:
+                    await channel.send("회의 시작해요!")
             case '점심시간':
                 if datetime.now().hour == 13 and datetime.now().minute == 0:
                     for j in ref_get[i+1].get('멤버'):
@@ -450,5 +436,5 @@ async def every_hour_notice():
         
 
 
-
+###### 봇 구동 ######
 bot.run(Token)
