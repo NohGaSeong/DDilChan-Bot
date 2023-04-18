@@ -466,7 +466,7 @@ async def every_hour_notice():
                 case '저녁시간':
                     if datetime.now().hour == 17 and datetime.now().minute == 55:
                         await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 13 and datetime.now().minute == 0:
+                    if datetime.now().hour == 18 and datetime.now().minute == 0:
                         await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
                 case '7교시':
                     if datetime.now().hour == 15 and datetime.now().minute == 25:
@@ -494,7 +494,7 @@ async def every_hour_notice():
                     if datetime.now().hour == 20 and datetime.now().minute == 30:
                         await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
     except:
-        print("오늘 회의 없어용 ~")
+        print("오늘 회의 없어용")
 
 
 ###### 봇 구동 ######
