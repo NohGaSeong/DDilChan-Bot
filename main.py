@@ -440,6 +440,7 @@ async def every_hour_notice():
     channel = bot.get_channel(int(channel_url))
 
     if datetime.now().hour == 8 and datetime.now().minute == 0:
+        embed.add_field(name="오늘의 회의", value = "아래의 회의들을 보고 참고해주세요!\n\n")
         await channel.send(content = "오늘의 회의 보고합니다!\n다들 오늘 하루도 화이팅하세요!", embed=embed)
         await channel.send("https://img.animalplanet.co.kr/news/2019/08/10/700/v4q0b0ff4hcpew1g6t39.jpg")
         time.sleep(1)
