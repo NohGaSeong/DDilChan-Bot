@@ -374,6 +374,7 @@ class Menu(discord.ui.View):
         super().__init__()
         self.value = None
 
+
     @discord.ui.button(label="회의 신청", style=discord.ButtonStyle.grey)
     async def menu1(self, interaction: discord.Interaction, button: discord.ui.Button):
         global meeting_subject
@@ -383,27 +384,30 @@ class Menu(discord.ui.View):
         view = Metting_place()
         member = interaction.user
         await interaction.response.send_message(content = "회의 주제를 알려주세요.")
-        
-        try:
-            message = await bot.wait_for("message", check=lambda message: interaction.user == member, timeout=15.0)
-        except asyncio.TimeoutError:
-            await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
+        channel = bot.get_channel(int(channel_url))
 
-        else :
-            meeting_subject = message.content
-            await message.channel.send(content= "회의할 날짜를 말해주세요. 이때 04-14 같은 형식으로 입력해주셔야해요!")
-            
+        while(True):
             try:
-                message = await bot.wait_for("message", check=lambda message: interaction.user == member, timeout=15.0)
+                message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=15.0)
             except asyncio.TimeoutError:
                 await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
-            else:
-                meeting_date = message.content
-                if len(meeting_date) != 5 or meeting_date[2:3] != "-":
-                    await message.channel.send("잘못된 정보를 입력하셨어요. 명령어를 다시 실행시켜주세요.")
-                else:   
-                    view = Metting_place()
-                    await message.channel.send(content = "회의할 장소를 선택해주세요.", view=view)
+                break
+        
+            else :
+                meeting_subject = message.content
+                await message.channel.send(content= "회의할 날짜를 말해주세요. 이때 04-14 같은 형식으로 입력해주셔야해요!")
+                try:
+                    message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=15.0)
+                except asyncio.TimeoutError:
+                    await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
+                else:
+                    meeting_date = message.content
+                    if len(meeting_date) != 5 or meeting_date[2:3] != "-":
+                        await message.channel.send("잘못된 정보를 입력하셨어요. 명령어를 다시 실행시켜주세요.")
+                    else:   
+                        view = Metting_place()
+                        await message.channel.send(content = "회의할 장소를 선택해주세요.", view=view)
+                break
 
 
 
