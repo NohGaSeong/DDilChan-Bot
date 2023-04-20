@@ -439,10 +439,9 @@ class Menu(discord.ui.View):
         await interaction.response.send_message("디스코드:가성#7216\n깃허브:NohGaSeong/DDilChan-Bot\n로 이슈 제보 및 코드 리뷰 부탁드려요!")
 
 ###### 백그라운드 함수 ######
-@tasks.loop(seconds=60)
+@tasks.loop(seconds=20)
 async def every_hour_notice():
     channel = bot.get_channel(int(channel_url))
-
     if datetime.now().hour == 8 and datetime.now().minute == 0:
         embed.add_field(name="오늘의 회의", value = "아래의 회의들을 보고 참고해주세요!\n\n")
         await channel.send(content = "오늘의 회의 보고합니다!\n다들 오늘 하루도 화이팅하세요!", embed=embed)
@@ -453,53 +452,56 @@ async def every_hour_notice():
         for i in range(len(ref_get)-1): 
             ###### 이슈로 인해 추후 코드 최적화 예정 ######
             for j in ref_get[i+1].get('멤버') :
+                print(j)
                 user_id = member_dict_get.get(j)
                 user = bot.get_user(int(user_id))
                 view = Meeting_check()
+                print(ref_get[i+1].get('시간'))
 
-            match ref_get[i+1].get('시간'):
-                case '아침시간':
-                    if datetime.now().hour == 7 and datetime.now().minute == 55:
-                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 8 and datetime.now().minute == 0:
-                        await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
-                case '점심시간':
-                    if datetime.now().hour == 12 and datetime.now().minute == 55:
-                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 13 and datetime.now().minute == 0:
-                        await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
-                case '저녁시간':
-                    if datetime.now().hour == 17 and datetime.now().minute == 55:
-                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 18 and datetime.now().minute == 0:
-                        await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
-                case '7교시':
-                    if datetime.now().hour == 15 and datetime.now().minute == 25:
-                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 15 and datetime.now().minute == 30:
-                        await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
-                case '8교시':
-                    if datetime.now().hour == 16 and datetime.now().minute == 35:
-                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 16 and datetime.now().minute == 40:
-                        await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
-                case '9교시':
-                    if datetime.now().hour == 17 and datetime.now().minute == 25:
-                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 17 and datetime.now().minute == 30:
-                        await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
-                case '10교시':
-                    if datetime.now().hour == 19 and datetime.now().minute == 25:
-                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 19 and datetime.now().minute == 30:
-                        await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
-                case '11교시':
-                    if datetime.now().hour == 20 and datetime.now().minute == 25:
-                        await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
-                    if datetime.now().hour == 20 and datetime.now().minute == 30:
-                        await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
+                match ref_get[i+1].get('시간'):
+                    case '아침시간':
+                        if datetime.now().hour == 7 and datetime.now().minute == 55:
+                            await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                        if datetime.now().hour == 8 and datetime.now().minute == 0:
+                            await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
+                    case '점심시간':
+                        if datetime.now().hour == 12 and datetime.now().minute == 55:
+                            await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                        if datetime.now().hour == 13 and datetime.now().minute == 0:
+                            await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
+                    case '저녁시간':
+                        if datetime.now().hour == 17 and datetime.now().minute == 55:
+                            await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                        if datetime.now().hour == 18 and datetime.now().minute == 0:
+                            await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
+                    case '7교시':
+                        if datetime.now().hour == 15 and datetime.now().minute == 25:
+                            await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                        if datetime.now().hour == 15 and datetime.now().minute == 30:
+                            await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
+                    case '8교시':
+                        if datetime.now().hour == 16 and datetime.now().minute == 35:
+                            await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                        if datetime.now().hour == 16 and datetime.now().minute == 40:
+                            await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
+                    case '9교시':
+                        if datetime.now().hour == 17 and datetime.now().minute == 25:
+                            await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                        if datetime.now().hour == 17 and datetime.now().minute == 30:
+                            await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
+                    case '10교시':
+                        if datetime.now().hour == 19 and datetime.now().minute == 25:
+                            await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                        if datetime.now().hour == 19 and datetime.now().minute == 30:
+                            await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
+                    case '11교시':
+                        if datetime.now().hour == 20 and datetime.now().minute == 25:
+                            await user.send(content = "5분 뒤 회의!\n오늘의 회의 목록을 보고 장소를 참고해주세요!", embed=embed)
+                        if datetime.now().hour == 20 and datetime.now().minute == 30:
+                            await channel.send(content = "회의 시작해요! 멤버 호출 하실래요?", view=view)
     except:
         print("오늘 회의 없어용")
+    
 
 
 ###### 봇 구동 ######
