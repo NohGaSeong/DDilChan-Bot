@@ -1,0 +1,63 @@
+
+name: Deploy to cloudtype
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: idol/ddilchan-bot
+          stage: main
+          yaml: >
+            name: ddilchan-bot
+
+            app: python@3.11
+
+            options:
+              ports: 8000
+              install: pip3 install -r requirements.txt
+              start: python3 main.py
+              env:
+              - name: Token
+                value: ${{secret.TOKEN}}
+              - name: database_url
+                value: ${{secret.DATABASE_URL}}
+              - name: guild_url
+                value: ${{secret.GUILD_URL}}
+              - name: channel_url
+                value : ${{secret.CHANNEL_URL}}
+              - name: no_meeting_vichan_gif
+                value: ${{secret.NO_MEETING_VICHAN_GIF}}
+              - name: one_meeting_vichan_gif
+                value: ${{secret.ONE_MEETING_VICHAN_GIF}}
+              - name: many_meeting_vichan_gif
+                value: ${{secret.MANY_MEETING_VICHAN_GIF}}
+              - name: many_many_meeting_vichan_gif
+                value: ${{secret.MANY_MANY_MEETING_VICHAN_GIF}}
+              prestart: echo ${firebase_json}
+                >>ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo ${member_list_1}
+                >> member_list_1.json && echo ${member_list_2} >>member_list_2.json
+              buildenv:
+                - name: firebase_json
+                  value: ${{secret.FIREBASE_JSON}}
+                - name: member_list_1
+                  value: ${{secret.MEMBER_LIST_1}}
+                - name: member_list_2
+                  value: ${{secret.MEMBER_LIST_2}}
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
