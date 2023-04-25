@@ -1,10 +1,12 @@
 import discord
 import os
+import asyncio
 import pytz
+import time 
 import firebase_admin
 import json
 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
 from firebase_admin import credentials
 from firebase_admin import db
@@ -35,6 +37,7 @@ meeting_time = ""
 meeting_place = ""
 meeting_member = []
 meeting_member_check = []
+meeting_date = ""
 
 ###### 봇 임베드 추가 ######
 embed=discord.Embed(timestamp=datetime.now(pytz.timezone('UTC')), color=0x54b800)
