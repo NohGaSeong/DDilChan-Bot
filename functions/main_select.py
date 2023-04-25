@@ -11,7 +11,6 @@ class Menu(discord.ui.View):
     @discord.ui.button(label="회의 신청", style=discord.ButtonStyle.grey)
     async def menu1(self, interaction: discord.Interaction, button: discord.ui.Button):
         global meeting_subject
-        global message
         global meeting_date
 
         view = Metting_place()
