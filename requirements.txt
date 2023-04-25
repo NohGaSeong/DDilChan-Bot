@@ -1,3 +1,4 @@
 discord==2.2.2
 discord.py==2.2.2
 firebase-admin==6.1.0
+pytz==2022.2.1
