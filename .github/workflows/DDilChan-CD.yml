@@ -32,31 +32,31 @@ jobs:
               start: python3 main.py
               env:
               - name: Token
-                value: ${{secret.TOKEN}}
+                value: ${{ secrets.TOKEN }}
               - name: database_url
-                value: ${{secret.DATABASE_URL}}
+                value: ${{ secrets.DATABASE_URL }}
               - name: guild_url
-                value: ${{secret.GUILD_URL}}
+                value: ${{ secrets.GUILD_URL }}
               - name: channel_url
-                value : ${{secret.CHANNEL_URL}}
+                value : ${{ secrets.CHANNEL_URL }}
               - name: no_meeting_vichan_gif
-                value: ${{secret.NO_MEETING_VICHAN_GIF}}
+                value: ${{ secrets.NO_MEETING_VICHAN_GIF }}
               - name: one_meeting_vichan_gif
-                value: ${{secret.ONE_MEETING_VICHAN_GIF}}
+                value: ${{ secrets.ONE_MEETING_VICHAN_GIF }}
               - name: many_meeting_vichan_gif
-                value: ${{secret.MANY_MEETING_VICHAN_GIF}}
+                value: ${{ secrets.MANY_MEETING_VICHAN_GIF }}
               - name: many_many_meeting_vichan_gif
-                value: ${{secret.MANY_MANY_MEETING_VICHAN_GIF}}
+                value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }}
               prestart: echo ${firebase_json}
                 >>ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo ${member_list_1}
                 >> member_list_1.json && echo ${member_list_2} >>member_list_2.json
               buildenv:
                 - name: firebase_json
-                  value: ${{secret.FIREBASE_JSON}}
+                  value: ${{ secrets.FIREBASE_JSON }}
                 - name: member_list_1
-                  value: ${{secret.MEMBER_LIST_1}}
+                  value: ${{ secrets.MEMBER_LIST_1 }}
                 - name: member_list_2
-                  value: ${{secret.MEMBER_LIST_2}}
+                  value: ${{ secrets.MEMBER_LIST_2 }}
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
