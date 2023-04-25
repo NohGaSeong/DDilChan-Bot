@@ -1,5 +1,5 @@
 from variable_manage import *
-from meeting_member_selects import SelectPage1, SelectPage2
+from functions.meeting_member_selects import SelectPage1
 
 class Metting_time(discord.ui.View):
     def __init__(self):

@@ -1,5 +1,5 @@
-from main_select import Menu
-from meeting_takepart import Meeting_opinion_button
+from functions.main_select import Menu
+from functions.meeting_takepart import Meeting_opinion_button
 from variable_manage import *
 
 ####### bot 시작 ######

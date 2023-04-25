@@ -1,4 +1,4 @@
-from meeting_time_select import Metting_time
+from functions.meeting_time_select import Metting_time
 from variable_manage import *
 
 class Metting_place(discord.ui.View):

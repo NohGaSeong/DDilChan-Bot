@@ -1,5 +1,5 @@
 from variable_manage import *
-from meeting_place_select import Metting_place
+from functions.meeting_place_select import Metting_place
 
 
 class Menu(discord.ui.View):

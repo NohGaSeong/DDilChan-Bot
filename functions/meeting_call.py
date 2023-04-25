@@ -1,5 +1,5 @@
 from variable_manage import *
-from meeting_takepart import Meeting_opinion_button
+from functions.meeting_takepart import Meeting_opinion_button
 
 class Meeting_check(discord.ui.View):
     @discord.ui.select(
