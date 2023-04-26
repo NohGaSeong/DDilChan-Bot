@@ -12,7 +12,6 @@ from firebase_admin import credentials
 from firebase_admin import db
 from datetime import datetime,date
 
-
 ###### 디스코드 봇 관련 설정 ######
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 allowed_mentions = discord.AllowedMentions(everyone = True)
