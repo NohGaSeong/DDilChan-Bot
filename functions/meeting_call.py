@@ -1,4 +1,5 @@
 from variable_manage import *
+import variable_manage as var_manage
 from functions.meeting_takepart import Meeting_opinion_button
 
 class Meeting_check(discord.ui.View):
@@ -12,7 +13,7 @@ class Meeting_check(discord.ui.View):
     async def select_callback(self, select, interaction):
         global meeting_member
 
-        meeting_member = interaction.values
+        var_manage.meeting_member = interaction.values
 
         if "다음페이지" in interaction.values:
             view = Meeting_check_2()
@@ -35,11 +36,11 @@ class Meeting_check_2(discord.ui.View):
     async def select_callback(self, select, interaction):
         global meeting_member
 
-        meeting_member += interaction.values
-        meeting_member.remove("다음페이지")
+        var_manage.meeting_member += interaction.values
+        var_manage.meeting_member.remove("다음페이지")
         view = Meeting_opinion_button()
 
-        for i in meeting_member:
+        for i in var_manage.meeting_member:
             user_id = member_dict_get.get(i)
             user = bot.get_user(int(user_id))
             await user.send(content = "회의 빨리와용", view = view)    

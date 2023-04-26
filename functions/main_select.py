@@ -1,4 +1,5 @@
 from variable_manage import *
+import variable_manage as var_manage
 from functions.meeting_place_select import Metting_place
 
 
@@ -26,15 +27,15 @@ class Menu(discord.ui.View):
                 break
         
             else :
-                meeting_subject = message.content
+                var_manage.meeting_subject = message.content
                 await message.channel.send(content= "회의할 날짜를 말해주세요. 이때 04-14 같은 형식으로 입력해주셔야해요!")
                 try:
                     message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=15.0)
                 except asyncio.TimeoutError:
                     await message.channel.send("15초가 지났어요. 명령어를 다시 실행시켜주세요.")
                 else:
-                    meeting_date = message.content
-                    if len(meeting_date) != 5 or meeting_date[2:3] != "-":
+                    var_manage.meeting_date = message.content
+                    if len(var_manage.meeting_date) != 5 or var_manage.meeting_date[2:3] != "-":
                         await message.channel.send("잘못된 정보를 입력하셨어요. 명령어를 다시 실행시켜주세요.")
                     else:   
                         await message.channel.send(content = "회의할 장소를 선택해주세요.", view=view)

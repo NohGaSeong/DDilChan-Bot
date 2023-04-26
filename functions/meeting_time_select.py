@@ -1,5 +1,6 @@
 from variable_manage import *
 from functions.meeting_member_selects import SelectPage1
+import variable_manage as var_manage
 
 class Metting_time(discord.ui.View):
     def __init__(self):
@@ -11,7 +12,7 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "아침시간"
+        var_manage.meeting_time = "아침시간"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
@@ -20,7 +21,7 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "점심시간"
+        var_manage.meeting_time = "점심시간"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
     
@@ -29,7 +30,7 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "저녁시간"
+        var_manage.meeting_time = "저녁시간"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
@@ -38,7 +39,7 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "7교시"
+        var_manage.meeting_time = "7교시"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
@@ -47,7 +48,7 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "8교시"
+        var_manage.meeting_time = "8교시"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
     
@@ -56,7 +57,7 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "9교시"
+        var_manage.meeting_time = "9교시"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
@@ -65,7 +66,7 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "10교시"
+        var_manage.meeting_time = "10교시"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
 
@@ -75,7 +76,7 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "11교시"
+        var_manage.meeting_time = "11교시"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
         
@@ -84,6 +85,6 @@ class Metting_time(discord.ui.View):
         global meeting_time
 
         view = SelectPage1()
-        meeting_time = "기숙사 자습시간"
+        var_manage.meeting_time = "기숙사 자습시간"
 
         await interaction.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
