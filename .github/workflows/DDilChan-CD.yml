@@ -16,19 +16,22 @@ jobs:
           ghtoken: ${{ secrets.GHP_TOKEN }}
           
       - name: create_firebase_json
-        uses: jsdaniell/create-json@1.1.2
+        id: create-json-1
+        uses: jsdaniell/create-json@1.2.2
         with:
           name: "ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json"
           json: ${{ secrets.FIREBASE_JSON }}
           
       - name: create_member_list_1
-        uses: jsdaniell/create-json@1.1.2
+        id: create-json-2
+        uses: jsdaniell/create-json@1.2.2
         with:
           name: "member_list_1.json"
           json: ${{ secrets.MEMBER_LIST_1 }}
           
       - name: create_member_list_2
-        uses: jsdaniell/create-json@1.1.2
+        id: create-json-3
+        uses: jsdaniell/create-json@1.2.2
         with:
           name: "member_list_2.json"
           json: ${{ secrets.MEMBER_LIST_2 }}
