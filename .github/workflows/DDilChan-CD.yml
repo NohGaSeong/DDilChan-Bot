@@ -28,7 +28,10 @@ jobs:
             options:
               ports: 8000
               install: pip3 install -r requirements.txt
-              start: python3 main.py
+              start: echo ${firebase_json} >>
+                ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo ${member_list_1}
+                >> member_list_1.json && echo ${member_list_2} >> member_list_2.json &&
+                python3 main.py
               env:
               - name: Token
                 value: ${{ secrets.TOKEN }}
