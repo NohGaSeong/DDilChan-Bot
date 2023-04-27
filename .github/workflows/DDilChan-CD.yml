@@ -14,6 +14,25 @@ jobs:
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           ghtoken: ${{ secrets.GHP_TOKEN }}
+          
+      - name: create_firebase_json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json"
+          json: ${{ secrets.FIREBASE_JSON }}
+          
+      - name: create_member_list_1
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "member_list_1.json"
+          json: ${{ secrets.GCP_JSON }}
+          
+      - name: create_member_list_2
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "member_list_2.json"
+          json: ${{ secrets.GCP_JSON }}
+          
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
         with:
@@ -43,17 +62,9 @@ jobs:
                 - name: one_meeting_vichan_gif
                   value: ${{ secrets.ONE_MEETING_VICHAN_GIF }}
                 - name: many_meeting_vichan_gif
-                  value: $ {{secrets.MANY_MEETING_VICHAN_GIF }}
+                  value: ${{secrets.MANY_MEETING_VICHAN_GIF }}
                 - name: many_many_meeting_vichan_gif
                   value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }}
-              buildenv:
-                - name: firebase_json
-                  value: ${{ secrets.FIREBASE_JSON }}
-                - name: member_list_1
-                  value: ${{ secrets.MEMBER_LIST_1 }}
-                - name: member_list_2
-                  value: ${{ secrets.MEMBER_LIST_2 }}
-              prestart: echo $firebase_json>>ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo $member_list_1 >>member_list_1.json && echo $member_list_2 >> member_list_2.json
               nodeversion: "14"
             context:
               git:
