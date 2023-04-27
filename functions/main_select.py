@@ -47,16 +47,16 @@ class Menu(discord.ui.View):
     async def menu2(self, interaction: discord.Interaction, button : discord.ui.Button):
         embed.set_author(name="띨챤의 회의 관리 리스트")
 
-        if today_meet_count > 3:
+        if var_manage.today_meet_count > 3:
             embed.set_image(url=(many_many_metting_vichan_gif))
 
             on_embed_text = "오늘은 회의로 가득한 날... 😭"
         
-        elif today_meet_count > 1:
+        elif var_manage.today_meet_count > 1:
             embed.set_image(url=(many_metting_vichan_gif))
             on_embed_text = "오늘은 회의 많은 날.. 😓"
 
-        elif today_meet_count == 1:
+        elif var_manage.today_meet_count == 1:
             embed.set_image(url=(one_metting_vichan_gif))
             on_embed_text = "오늘의 회의 1개 뿐인 날! 🎉"
         

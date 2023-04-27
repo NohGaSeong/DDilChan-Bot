@@ -18,14 +18,24 @@ class SelectPage1(discord.ui.View):
             view = SelectPage2()
             await select.response.send_message(content = "회의에 참석할 멤버를 선택해주세요.", view=view)
         else :
-            var_manage.db_count += 1
-            ref =  db.reference(var_manage.meeting_date + "/" + str(var_manage.db_count))
-            ref.update({'주제': str(var_manage.meeting_subject)})
-            ref.update({'날짜': str(var_manage.meeting_date)})
-            ref.update({'시간': var_manage.meeting_time})
-            ref.update({'장소': var_manage.meeting_place})
-            ref.update({'멤버': var_manage.meeting_member})
-            await select.response.send_message("회의 등록이 완료되었어요.")
+            if var_manage.meeting_date == ref_today_cut :
+                var_manage.embed.add_field(name=f"{var_manage.meeting_subject}", 
+                            value = f"날짜 : {var_manage.meeting_date}\n"
+                                + f"회의시간: {var_manage.meeting_place}\n"
+                                + f"회의장소: {var_manage.meeting_place}\n"
+                                + f"참석인원: {var_manage.meeting_member}\n",
+                            inline=False)
+                var_manage.today_meet_count += 1
+                await select.response.send_message("회의 등록이 완료됐어요.")
+            else:
+                var_manage.db_count += 1
+                ref =  db.reference(var_manage.meeting_date + "/" + str(var_manage.db_count))
+                ref.update({'주제': str(var_manage.meeting_subject)})
+                ref.update({'날짜': str(var_manage.meeting_date)})
+                ref.update({'시간': var_manage.meeting_time})
+                ref.update({'장소': var_manage.meeting_place})
+                ref.update({'멤버': var_manage.meeting_member})
+                await select.response.send_message("회의 등록이 완료되었어요.")
 
 class SelectPage2(discord.ui.View):
     @discord.ui.select(
@@ -49,4 +59,13 @@ class SelectPage2(discord.ui.View):
         ref.update({'시간': var_manage.meeting_time})
         ref.update({'장소': var_manage.meeting_place})
         ref.update({'멤버': var_manage.meeting_member})
+
+        if var_manage.meeting_date == ref_today_cut :
+            var_manage.embed.add_field(name=f"{var_manage.meeting_subject}", 
+                            value = f"날짜 : {var_manage.meeting_date}\n"
+                                + f"회의시간: {var_manage.meeting_place}\n"
+                                + f"회의장소: {var_manage.meeting_place}\n"
+                                + f"참석인원: {var_manage.meeting_member}\n",
+                            inline=False)
+            var_manage.today_meet_count += 1
         await select.response.send_message("회의 등록이 완료됐어요.")

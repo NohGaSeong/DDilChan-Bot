@@ -1,6 +1,7 @@
 from functions.main_select import Menu
 from functions.meeting_takepart import Meeting_opinion_button
 from variable_manage import *
+import variable_manage as var_manage
 
 ####### bot 시작 ######
 @bot.event
@@ -16,13 +17,13 @@ async def on_ready():
     
     try:
         for i in range(len(ref_get)-1):
-            embed.add_field(name=f"{ref_get[i+1].get('주제')}", 
+            var_manage.embed.add_field(name=f"{ref_get[i+1].get('주제')}", 
                             value = f"날짜 : {ref_get[i+1].get('날짜')}\n"
                                 + f"회의시간: {ref_get[i+1].get('시간')}\n"
                                 + f"회의장소: {ref_get[i+1].get('장소')}\n"
                                 + f"참석인원: {ref_get[i+1].get('멤버')}\n",
                             inline=False)
-            today_meet_count += 1
+            var_manage.today_meet_count += 1
     except:
         print("오늘은 회의가 없어용")
 
