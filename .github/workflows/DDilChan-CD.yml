@@ -26,6 +26,7 @@ jobs:
         run : |
           aws s3 cp s3://gsm-ia-s3-bucket/bot_json.zip .
           unzip bot_json.zip
+          ls
           
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
@@ -64,3 +65,5 @@ jobs:
               git:
                 url: git@github.com:${{ github.repository }}.git
                 ref: ${{ github.ref }}
+      - name: test
+        run : ls
