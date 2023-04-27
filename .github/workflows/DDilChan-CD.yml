@@ -28,8 +28,7 @@ jobs:
             options:
               ports: 8000
               install: pip3 install -r requirements.txt
-              start:
-                python3 main.py
+              start: python3 main.py
               env:
               - name: Token
                 value: ${{ secrets.TOKEN }}
@@ -48,19 +47,14 @@ jobs:
               - name: many_many_meeting_vichan_gif
                 value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }} 
               prestart: echo $firebase_json >> ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo $member_list_1 >> member_list_1.json && echo $member_list_2 >> member_list_2.json  
-               prestart: echo $firbase_json >>ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json
-                && echo $member_list_1 >>member_list_1.json && echo $member_list_2 >>
-                member_list_2.json
               buildenv:
-                - name: firbase_json
+                - name: firebase_json
                   value: ${{secrets.FIREBASE_JSON }}
                 - name: member_list_1
                   value: ${{ secrets.MEMBER_LIST_1 }}
                 - name: member_list_2
                   value: ${{ secrets.MEMBER_LIST_2 }}
-            context:
-            
-            wcontext:
-              git:
-                url: git@github.com:${{ github.repository }}.git
-                ref: ${{ github.ref }}
+              context:
+                git:
+                  url: git@github.com:${{ github.repository }}.git
+                  ref: ${{ github.ref }}
