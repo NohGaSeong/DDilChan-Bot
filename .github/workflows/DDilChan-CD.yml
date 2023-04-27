@@ -37,15 +37,15 @@ jobs:
                 - name: guild_url
                   value: ${{ secrets.GUILD_URL }}
                 - name: channel_url
-                  value : ${{ secrets.CHANNEL_URL }}
+                  value: ${{ secrets.CHANNEL_URL }}
                 - name: no_meeting_vichan_gif
                   value: ${{ secrets.NO_MEETING_VICHAN_GIF }}
                 - name: one_meeting_vichan_gif
                   value: ${{ secrets.ONE_MEETING_VICHAN_GIF }}
                 - name: many_meeting_vichan_gif
-                  value: ${{ secrets.MANY_MEETING_VICHAN_GIF }}
+                  value: $ {{secrets.MANY_MEETING_VICHAN_GIF }}
                 - name: many_many_meeting_vichan_gif
-                  value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }} 
+                  value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }}
               buildenv:
                 - name: firebase_json
                   value: ${{ secrets.FIREBASE_JSON }}
@@ -53,7 +53,8 @@ jobs:
                   value: ${{ secrets.MEMBER_LIST_1 }}
                 - name: member_list_2
                   value: ${{ secrets.MEMBER_LIST_2 }}
-              prestart: echo $firebase_json >> ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo $member_list_1 >> member_list_1.json && echo $member_list_2 >> member_list_2.json
+              prestart: echo $firebase_json>>ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo $member_list_1 >>member_list_1.json && echo $member_list_2 >> member_list_2.json
+              nodeversion: "14"
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
