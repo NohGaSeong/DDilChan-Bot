@@ -55,11 +55,11 @@ jobs:
                 echo ${member_list_2} >> member_list_2.json
               buildenv:
                 - name: firebase_json
-                  value: $"{{ secrets.FIREBASE_JSON }}"
+                  value: ${{ secrets.FIREBASE_JSON }}
                 - name: member_list_1
-                  value: $"{{ secrets.MEMBER_LIST_1 }}"
+                  value: ${{ secrets.MEMBER_LIST_1 }}
                 - name: member_list_2
-                  value: $"{{ secrets.MEMBER_LIST_2 }}"
+                  value: ${{ secrets.MEMBER_LIST_2 }}
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
