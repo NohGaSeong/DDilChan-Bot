@@ -30,31 +30,36 @@ jobs:
               install: pip3 install -r requirements.txt
               start: python3 main.py
               env:
-              - name: Token
-                value: ${{ secrets.TOKEN }}
-              - name: database_url
-                value: ${{ secrets.DATABASE_URL }}
-              - name: guild_url
-                value: ${{ secrets.GUILD_URL }}
-              - name: channel_url
-                value : ${{ secrets.CHANNEL_URL }}
-              - name: no_meeting_vichan_gif
-                value: ${{ secrets.NO_MEETING_VICHAN_GIF }}
-              - name: one_meeting_vichan_gif
-                value: ${{ secrets.ONE_MEETING_VICHAN_GIF }}
-              - name: many_meeting_vichan_gif
-                value: ${{ secrets.MANY_MEETING_VICHAN_GIF }}
-              - name: many_many_meeting_vichan_gif
-                value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }} 
-              prestart: echo $firebase_json >> ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo $member_list_1 >> member_list_1.json && echo $member_list_2 >> member_list_2.json  
-              buildenv:
-                - name: firebase_json
-                  value: ${{secrets.FIREBASE_JSON }}
-                - name: member_list_1
-                  value: ${{ secrets.MEMBER_LIST_1 }}
-                - name: member_list_2
-                  value: ${{ secrets.MEMBER_LIST_2 }}
+                - name: Token
+                  value: ${{ secrets.TOKEN }}
+                - name: database_url
+                  value: ${{ secrets.DATABASE_URL }}
+                - name: guild_url
+                  value: ${{ secrets.GUILD_URL }}
+                - name: channel_url
+                  value : ${{ secrets.CHANNEL_URL }}
+                - name: no_meeting_vichan_gif
+                  value: ${{ secrets.NO_MEETING_VICHAN_GIF }}
+                - name: one_meeting_vichan_gif
+                  value: ${{ secrets.ONE_MEETING_VICHAN_GIF }}
+                - name: many_meeting_vichan_gif
+                  value: ${{ secrets.MANY_MEETING_VICHAN_GIF }}
+                - name: many_many_meeting_vichan_gif
+                  value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }} 
+            prestart: echo $firebase_json >> ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json && echo $member_list_1 >> member_list_1.json && echo $member_list_2 >> member_list_2.json
+            buildenv:
+              - name: firebase_json
+                value: ${{ secrets.FIREBASE_JSON }}
+              - name: member_list_1
+                value: ${{ secrets.MEMBER_LIST_1 }}
+              - name: member_list_2
+                value: ${{ secrets.MEMBER_LIST_2 }}
               context:
                 git:
-                  url: git@github.com:${{ github.repository }}.git
-                  ref: ${{ github.ref }}
+                  url: git@github.com:NohGaSeong/DDilChan-Bot.git
+                  ref: refs/heads/main
+              nodeversion: "14"
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
