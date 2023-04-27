@@ -53,7 +53,7 @@ jobs:
                 echo ${firebase_json} >> ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json &&
                 echo ${member_list_1} >> member_list_1.json &&
                 echo ${member_list_2} >> member_list_2.json
-             buildenv:
+              buildenv:
                 - name: firebase_json
                   value: $"{{ secrets.FIREBASE_JSON }}"
                 - name: member_list_1
