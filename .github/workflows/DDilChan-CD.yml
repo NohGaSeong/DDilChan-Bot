@@ -15,26 +15,17 @@ jobs:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           ghtoken: ${{ secrets.GHP_TOKEN }}
           
-      - name: create_firebase_json
-        id: create-json-1
-        uses: jsdaniell/create-json@v1.2.2
+      - name: Set up AWS IAM
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          name: "ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json"
-          json: ${{ secrets.FIREBASE_JSON }}
-          
-      - name: create_member_list_1
-        id: create-json-2
-        uses: jsdaniell/create-json@v1.2.2
-        with:
-          name: "member_list_1.json"
-          json: ${{ secrets.MEMBER_LIST_1 }}
-          
-      - name: create_member_list_2
-        id: create-json-3
-        uses: jsdaniell/create-json@v1.2.2
-        with:
-          name: "member_list_2.json"
-          json: ${{ secrets.MEMBER_LIST_2 }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      
+      - name: downloads zip to s3
+        run : |
+          aws s3 cp s3://gsm-ia-s3-bucket/bot_json.zip .
+          unzip bot_json.zip
           
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
