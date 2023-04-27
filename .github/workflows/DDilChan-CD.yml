@@ -47,9 +47,16 @@ jobs:
               - name: many_many_meeting_vichan_gif
                 value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }}
               prestart: 
-                echo ${{ secrets.FIREBASE_JSON }} >> ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json &&
-                echo ${{ secrets.MEMBER_LIST_1 }} >> member_list_1.json &&
-                echo ${{ secrets.MEMBER_LIST_2 }} >> member_list_2.json
+                echo ${{firebase_json }} >> ddillchan-firebase-adminsdk-r1wuk-712b7d43b7.json &&
+                echo ${{ member_list_1 }} >> member_list_1.json &&
+                echo ${{ member_list_2 }} >> member_list_2.json
+             buildenv:
+                - name: firebase_json
+                  value: ${{ secrets.FIREBASE_JSON }}
+                - name: member_list_1
+                  value: ${{ secrets.MEMBER_LIST_1 }}
+                - name: member_list_2
+                  value: ${{ secrets.MEMBER_LIST_2 }}
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
