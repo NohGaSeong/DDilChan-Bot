@@ -25,13 +25,13 @@ jobs:
         uses: jsdaniell/create-json@1.1.2
         with:
           name: "member_list_1.json"
-          json: ${{ secrets.GCP_JSON }}
+          json: ${{ secrets.MEMBER_LIST_1 }}
           
       - name: create_member_list_2
         uses: jsdaniell/create-json@1.1.2
         with:
           name: "member_list_2.json"
-          json: ${{ secrets.GCP_JSON }}
+          json: ${{ secrets.MEMBER_LIST_2 }}
           
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
