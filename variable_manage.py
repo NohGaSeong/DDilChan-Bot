@@ -22,10 +22,10 @@ Token = os.getenv('Token')
 database_url = os.getenv('database_url')
 guild_url = os.getenv('guild_url')
 channel_url = os.getenv('channel_url')
-many_many_metting_vichan_gif = ('many_many_metting_vichan_gif')
-many_metting_vichan_gif = os.getenv('many_metting_vichan_gif')
-one_metting_vichan_gif = os.getenv('one_metting_vichan_gif')
-no_metting_vichan_gif = os.getenv('no_metting_vichan_gif')
+many_many_meeting_vichan_gif = ('many_many_meeting_vichan_gif')
+many_meeting_vichan_gif = os.getenv('many_meeting_vichan_gif')
+one_meeting_vichan_gif = os.getenv('one_meeting_vichan_gif')
+no_meeting_vichan_gif = os.getenv('no_meeting_vichan_gif')
 
 ###### 기본적으로 사용하는 변수 선언 ######
 today_meet_count = 0
