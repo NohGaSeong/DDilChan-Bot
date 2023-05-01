@@ -15,18 +15,11 @@ jobs:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           ghtoken: ${{ secrets.GHP_TOKEN }}
           
-      - name: Set up AWS IAM
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-      
-      - name: downloads zip to s3
+      - name : Crete Dockerfile
         run : |
-          aws s3 cp s3://gsm-ia-s3-bucket/bot_json.zip .
-          unzip bot_json.zip
-          ls
+          rm -rf dockerfile
+          touch dockerfile
+          echo "${{ secrets.DOCKERFILE }}" >> dockerfile
           
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
@@ -35,14 +28,13 @@ jobs:
           project: idol/ddilchan-bot
           stage: main
           yaml: >
-            name: ddilchan-bot
+            name: viichan-bot
 
-            app: python@3.11
+            app: dockerfile
 
             options:
-              ports: 8000
-              install: pip3 install -r requirements.txt
-              start: python3 main.py
+              ports: "5000"
+              dockerfile: Dockerfile
               env:
                 - name: Token
                   value: ${{ secrets.TOKEN }}
@@ -57,13 +49,10 @@ jobs:
                 - name: one_meeting_vichan_gif
                   value: ${{ secrets.ONE_MEETING_VICHAN_GIF }}
                 - name: many_meeting_vichan_gif
-                  value: ${{secrets.MANY_MEETING_VICHAN_GIF }}
+                  value: ${{ secrets.MANY_MEETING_VICHAN_GIF }}
                 - name: many_many_meeting_vichan_gif
                   value: ${{ secrets.MANY_MANY_MEETING_VICHAN_GIF }}
-              nodeversion: "14"
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
                 ref: ${{ github.ref }}
-      - name: test
-        run : ls
