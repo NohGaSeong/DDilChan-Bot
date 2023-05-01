@@ -34,7 +34,7 @@ jobs:
 
             options:
               ports: "5000"
-              dockerfile: Dockerfile
+              dockerfile: dockerfile
               env:
                 - name: Token
                   value: ${{ secrets.TOKEN }}
