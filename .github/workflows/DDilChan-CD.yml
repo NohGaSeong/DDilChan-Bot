@@ -19,7 +19,7 @@ jobs:
         run : |
           rm -rf dockerfile
           touch dockerfile
-          echo "${{ secrets.DOCKERFILE }}" >> dockerfile
+          echo "${{ secrets.DOCKERFILE }}" >> Dockerfile
           
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
