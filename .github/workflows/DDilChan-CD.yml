@@ -17,7 +17,7 @@ jobs:
           
       - name : Crete Dockerfile
         run : |
-          rm -rf Dockerfile
+          rm -rf Dockerfile 
           touch Dockerfile
           echo "${{ secrets.DOCKERFILE }}" >> Dockerfile
           
