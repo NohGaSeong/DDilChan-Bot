@@ -30,11 +30,11 @@ jobs:
           yaml: >
             name: viichan-bot
 
-            app: dockerfile
+            app: Dockerfile
 
             options:
               ports: "5000"
-              dockerfile: dockerfile
+              dockerfile: Dockerfile
               env:
                 - name: Token
                   value: ${{ secrets.TOKEN }}
